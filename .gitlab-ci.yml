@@ -1,0 +1,34 @@
+stages:
+  - test
+
+cache:
+  key: "geoserver-client"
+  paths:
+  - .composer-cache/
+
+## Making sure that the composer cache folder is the one we have in the CI cache
+before_script:
+  - export COMPOSER_CACHE_DIR=`pwd`/.composer-cache
+
+
+# Job templates
+
+.testing: &testing
+  stage: test
+  script:
+    - composer install --prefer-dist
+    - ./vendor/bin/parallel-lint --exclude vendor .
+    - ./vendor/bin/php-cs-fixer --dry-run fix
+    - ./vendor/bin/phpunit
+  artifacts:
+    paths:
+    - coverage
+
+# Testing jobs
+  
+phpunit:7.1:
+  image: "docker.klink.asia/main/docker-php:7.1"
+  <<: *testing
+  tags:
+  - docker
+

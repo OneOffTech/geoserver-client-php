@@ -1,0 +1,17 @@
+## Test environment
+## This docker compose starts the necessary services to run integration tests
+
+version: "2"
+
+networks:
+  internal:
+
+services:
+  geoserver:
+    image: "kartoza/geoserver:2.13.0"
+    env_file:
+        - geoserver.env
+    ports:
+      - "8600:80"
+    networks:
+      - internal
