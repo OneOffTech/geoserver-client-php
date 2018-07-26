@@ -10,7 +10,7 @@ use Http\Client\Exception\RequestException;
 $messageFactory = MessageFactoryDiscovery::find();
 $httpClient = HttpClientDiscovery::find();
 
-$route = rtrim(getenv('GEOSERVER_URL'), '/') . '/rest/about/version.json'; //rtrim(getenv('GEOSERVER_URL'), '/')
+$route = 'http://127.0.0.1:8600/geoserver/rest/about/version.html';
 
 $request = $messageFactory->createRequest('GET', $route, []);
 
