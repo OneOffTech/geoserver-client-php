@@ -13,6 +13,8 @@ use OneOffTech\GeoServer\Contracts\Authentication;
 use Http\Message\MessageFactory;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
+use JMS\Serializer\EventDispatcher\EventDispatcher;
+use OneOffTech\GeoServer\Serializer\DeserializeDataStoreResponseSubscriber;
 
 final class Options
 {
@@ -58,6 +60,10 @@ final class Options
         );
 
         $this->messageFactory = MessageFactoryDiscovery::find();
-        $this->serializer = SerializerBuilder::create()->build();
+        $this->serializer = SerializerBuilder::create()
+            ->configureListeners(function(EventDispatcher $dispatcher) {
+                $dispatcher->addSubscriber(new DeserializeDataStoreResponseSubscriber());
+            })
+            ->build();;
     }
 }

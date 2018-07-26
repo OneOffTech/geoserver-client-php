@@ -13,13 +13,21 @@ use OneOffTech\GeoServer\Auth\NullAuthentication;
 use OneOffTech\GeoServer\Http\Routes;
 use Psr\Http\Message\ResponseInterface;
 use JMS\Serializer\Exception\Exception as JMSException;
-use OneOffTech\GeoServer\Http\RequestFactory;
 use OneOffTech\GeoServer\Serializer\DeserializeErrorEventSubscriber;
 use OneOffTech\GeoServer\Http\InteractsWithHttp;
+use OneOffTech\GeoServer\Models\Workspace;
+
+use OneOffTech\GeoServer\Http\Responses\WorkspaceResponse;
+use OneOffTech\GeoServer\Http\Responses\DataStoreResponse;
+use OneOffTech\GeoServer\Models\DataStore;
+
 
 final class GeoServer
 {
     use InteractsWithHttp;
+
+    /** @var string */
+    private $workspace;
 
     /** @var  Routes */
     private $routes;
@@ -35,8 +43,8 @@ final class GeoServer
         $this->httpClient = $options->httpClient;
         $this->messageFactory = $options->messageFactory;
         $this->routes = new Routes($url);
-        // $this->apiRequestFactory = new RequestFactory;
         $this->serializer = $options->serializer;
+        $this->workspace = $workspace;
     }
 
     /**
@@ -55,6 +63,56 @@ final class GeoServer
     }
 
 
+    /**
+     * Retrieve the workspace information.
+     * 
+     * @uses the workspace specified during client instantiation
+     * 
+     * @return \OneOffTech\GeoServer\Models\Workspace
+     */
+    public function workspace()
+    {
+        $route = $this->routes->url("workspaces/$this->workspace");
+
+        $response = $this->get($route, WorkspaceResponse::class);
+
+        return $response->workspace;
+    }
+
+    /**
+     * Retrieve the list of datastores defined in the workspace.
+     * A data store contains vector format spatial data.
+     * 
+     * @uses the workspace specified during client instantiation
+     * 
+     * @return \OneOffTech\GeoServer\Models\DataStore[]
+     */
+    public function datastores()
+    {
+        $route = $this->routes->url("workspaces/$this->workspace/datastores");
+
+        $response = $this->get($route, DataStoreResponse::class);
+
+        return $response->dataStores;
+    }
+
+    /**
+     * Retrieve the details of a data store.
+     * A data store contains vector format spatial data. It can be a file (such as a shapefile),...
+     * 
+     * @uses the workspace specified during client instantiation
+     * 
+     * @param string $name The data store name
+     * @return \OneOffTech\GeoServer\Models\DataStore
+     */
+    public function datastore($name)
+    {
+        $route = $this->routes->url("workspaces/$this->workspace/datastores/$name");
+
+        $response = $this->get($route, DataStore::class);
+
+        return $response;
+    }
 
     /**
      * Build a GeoServer client

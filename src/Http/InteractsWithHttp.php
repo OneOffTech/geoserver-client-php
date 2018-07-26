@@ -109,7 +109,7 @@ trait InteractsWithHttp
 
         $response = $this->handleRequest($request);
 
-        return $this->deserialize($response, $class = null);
+        return $this->deserialize($response, $class);
     }
 
     protected function post($route, $data, $class = null)
