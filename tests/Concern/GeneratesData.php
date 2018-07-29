@@ -4,6 +4,4 @@ namespace Tests\Concern;
 
 trait GeneratesData
 {
-
-   
 }
