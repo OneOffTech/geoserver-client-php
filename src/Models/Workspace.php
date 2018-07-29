@@ -5,7 +5,6 @@ namespace OneOffTech\GeoServer\Models;
 use JMS\Serializer\Annotation as JMS;
 use OneOffTech\GeoServer\Contracts\Model;
 
-
 class Workspace extends Model
 {
 

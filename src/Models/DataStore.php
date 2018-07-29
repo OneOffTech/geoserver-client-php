@@ -5,7 +5,6 @@ namespace OneOffTech\GeoServer\Models;
 use JMS\Serializer\Annotation as JMS;
 use OneOffTech\GeoServer\Contracts\Model;
 
-
 class DataStore extends Model
 {
     /**
@@ -23,14 +22,14 @@ class DataStore extends Model
     public $href;
 
     /**
-     * 
+     *
      * @var bool
      * @JMS\Type("boolean")
      */
     public $enabled;
     
     /**
-     * 
+     *
      * @var bool
      * @JMS\Type("boolean")
      * @JMS\SerializedName("_default")
@@ -44,7 +43,7 @@ class DataStore extends Model
     public $workspace;
 
     /**
-     * 
+     *
      * @var string
      * @JMS\Type("string")
      * @JMS\SerializedName("featureTypes")
@@ -52,7 +51,7 @@ class DataStore extends Model
     public $featureTypes;
 
     /**
-     * 
+     *
      * @var string
      * @JMS\Type("array")
      * @JMS\SerializedName("connectionParameters")

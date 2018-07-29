@@ -38,16 +38,16 @@ class DeserializeDataStoreResponseSubscriber implements EventSubscriberInterface
         $data = $event->getData();
 
         // The DataStoreResponse has an annoying multi-level
-        // array. This aims at flatten the array to 
+        // array. This aims at flatten the array to
         // a single level
         if (isset($data['dataStores']) && is_array($data['dataStores'])) {
-            $data['dataStores'] = array_map(function($a){
+            $data['dataStores'] = array_map(function ($a) {
                 return isset($a[0]) ? $a[0] : $a;
-            },array_values($data['dataStores']));
+            }, array_values($data['dataStores']));
         }
 
         // The DataStore has an annoying dataStore key that contain
-        // the details. This aims at remove that key when 
+        // the details. This aims at remove that key when
         // deserializing a Models\DataStore instance
         if (isset($data['dataStore']) && is_array($data['dataStore'])) {
             $data = $data['dataStore'];
