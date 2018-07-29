@@ -42,7 +42,8 @@ trait InteractsWithHttp
         $contentTypeHeader = $response->getHeader('Content-Type');
         $contentType = !empty($contentTypeHeader) ? $contentTypeHeader[0] : '';
         
-        if ($response->getStatusCode() !== 200) {
+        if ($response->getStatusCode() !== 200 && $response->getStatusCode() !== 201 && $response->getStatusCode() !== 204) {
+            // dump($response);
             if ($response->getStatusCode() === 500 && strpos($contentType, 'text/html')!== false) {
                 $reason = substr((string)$responseBody, 0, 500);
 
@@ -63,6 +64,7 @@ trait InteractsWithHttp
      */
     protected function deserialize($response, $class = null)
     {
+        // dump(json_decode($response->getBody()));
         if (is_null($class)) {
             return json_decode($response->getBody());
         }
@@ -118,7 +120,7 @@ trait InteractsWithHttp
 
         $response = $this->handleRequest($request);
 
-        return $response;
+        return $this->deserialize($response, $class);
     }
 
     protected function put($route, $data, $class = null)
@@ -127,7 +129,16 @@ trait InteractsWithHttp
 
         $response = $this->handleRequest($request);
 
-        return $response;
+        return $this->deserialize($response, $class);
+    }
+    
+    protected function putFile($route, $data, $class = null)
+    {
+        $request = $this->messageFactory->createRequest('PUT', $route, ['Content-Type' => $data->mimeType], $data->content());
+
+        $response = $this->handleRequest($request);
+
+        return $this->deserialize($response, $class);
     }
 
     protected function delete($route, $class = null)
@@ -136,6 +147,6 @@ trait InteractsWithHttp
 
         $response = $this->handleRequest($request);
 
-        return $response;
+        return $this->deserialize($response, $class);
     }
 }
