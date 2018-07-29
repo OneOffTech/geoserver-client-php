@@ -1,0 +1,127 @@
+<?php
+
+namespace OneOffTech\GeoServer\Support;
+
+use Exception;
+use OneOffTech\GeoServer\Contracts\FileReader;
+
+final class BinaryReader extends FileReader
+{
+    private static function isBigEndianMachine()
+    {
+        return current(unpack('v', pack('S', 0xff))) !== 0xff;
+    }
+
+    private static function readData($path, $type, $length, $position = 0, $invert_endianness = false)
+    {
+        $handle = self::openFileBinary($path, $position);
+        $data = fread($handle, $length);
+        self::closeFile($handle);
+
+        if ($data === false) {
+            return null;
+        }
+        if ($invert_endianness) {
+            $data = strrev($data);
+        }
+
+        return current(unpack($type, $data));
+    }
+    
+    /**
+     * Read a 32 bit integer from the beginning of a file
+     *
+     * @param string $path the file path to read from
+     * @param bool $big_endian if the integer is in big endian notation. Default true
+     * @return integer
+     */
+    public static function readInt32($path, $position = 0, $big_endian = true)
+    {
+        return self::readData($path, $big_endian ? 'N' : 'V', 4, $position);
+    }
+    
+    public static function readShort($path, $position = 0, $big_endian = true)
+    {
+        return self::readData($path, 's', 2, $position);
+    }
+    
+
+    public static function isGeoTiff($path)
+    {
+        $handle = self::openFileBinary($path);
+        
+        // https://www.awaresystems.be/imaging/tiff/specification/TIFF6.pdf
+        // 8 bytes header:
+        // - 2 bytes for the byte order
+        // - 2 bytes for the TIFF header
+        // - 4 bytes for the offset to the first IFD.
+        $tiffHeader = fread($handle, 8);
+
+        if ($tiffHeader === false) {
+            self::closeFile($handle);
+            return false;
+        }
+
+        $byteOrder = current(unpack('a', $tiffHeader)) . current(unpack('a', $tiffHeader, 1));
+
+        if (!in_array($byteOrder, ['MM', 'II'])) {
+            // unknown byte order
+            self::closeFile($handle);
+            return false;
+        }
+
+        $big_endian = $byteOrder === 'MM' ? true : false;
+        $tiffCode = current(unpack('s', $tiffHeader, 2));
+
+        if ($tiffCode !== 42) {
+            // tiff code not found
+            self::closeFile($handle);
+            return false;
+        }
+
+        $byteOffset = self::getBytes($tiffHeader, 4, 4, $big_endian);
+
+        fseek($handle, $byteOffset);
+
+        $numDirData = fread($handle, 2);
+
+        $numDirEntries = self::getBytes($numDirData, 2, 0, $big_endian);
+        fseek($handle, $byteOffset+2);
+
+        $imageFileDirectoriesData = fread($handle, (12 * $numDirEntries)+12);
+
+
+        // from the Image File Directories record in the TIFF file I need the GeoKeyDirectory
+        // and the values in the GeoKeyDirectory, which has field code 34735
+        // https://www.geospatialworld.net/article/geotiff-a-standard-image-file-format-for-gis-applications/
+
+        // Even if from https://github.com/xlhomme/GeotiffParser.js/blob/master/js/GeotiffParser.js
+        // seems that the GeoKeyDirectory field should have 4 values to be a valid GeoTiff
+        // we consider the presence of the tag a valid indicator
+        
+        $hasGeoKeyDirectory = false;
+        for ($i = 0, $entryCount = 0; $entryCount < $numDirEntries; $i += 12, $entryCount++) {
+            $fieldTag = self::getBytes($imageFileDirectoriesData, 2, $i, $big_endian);
+
+            if ($fieldTag === 34735) { // GeoKeyDirectory field
+                $hasGeoKeyDirectory = true;
+                break;
+            }
+        }
+
+        self::closeFile($handle);
+
+        return $hasGeoKeyDirectory;
+    }
+
+    private static function getBytes($data, $length, $offset = 0, $big_endian = true)
+    {
+        if ($length <= 2) {
+            return current(unpack($big_endian ? 'n' : 'v', $data, $offset));
+        } elseif ($length <= 4) {
+            return current(unpack($big_endian ? 'N' : 'V', $data, $offset));
+        }
+        // unsigned short 16bit current(unpack($big_endian ? 'n' : 'v', $tiffHeader, 4));
+        // unsigned long 32bit current(unpack($big_endian ? 'N' : 'V', $tiffHeader, 4));
+    }
+}
