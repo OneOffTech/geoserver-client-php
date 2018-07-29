@@ -61,9 +61,10 @@ final class Options
 
         $this->messageFactory = MessageFactoryDiscovery::find();
         $this->serializer = SerializerBuilder::create()
-            ->configureListeners(function(EventDispatcher $dispatcher) {
+            ->configureListeners(function (EventDispatcher $dispatcher) {
                 $dispatcher->addSubscriber(new DeserializeDataStoreResponseSubscriber());
             })
-            ->build();;
+            ->build();
+        ;
     }
 }
