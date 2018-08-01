@@ -9,7 +9,7 @@ use OneOffTech\GeoServer\Exception\InvalidDataException;
 use Tests\Concern\SetupIntegrationTest;
 use OneOffTech\GeoServer\Models\Workspace;
 
-class GeoServerWorkspaceRetrievalTest extends TestCase
+class GeoServerWorkspaceTest extends TestCase
 {
     use SetupIntegrationTest;
 

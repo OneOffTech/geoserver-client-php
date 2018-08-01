@@ -16,25 +16,6 @@ class GeoServerDataStoresTest extends TestCase
 {
     use SetupIntegrationTest;
 
-    public function test_datastores_are_retrieved()
-    {
-        $datastores = $this->geoserver->datastores();
-
-        $this->assertContainsOnlyInstancesOf(DataStore::class, $datastores);
-    }
-
-    public function test_datastore_can_be_retrieved_by_name()
-    {
-        $datastore = $this->geoserver->datastore('test');
-
-        $this->assertInstanceOf(DataStore::class, $datastore);
-        $this->assertEquals(getenv('GEOSERVER_WORKSPACE'), $datastore->workspace);
-        $this->assertEmpty($datastore->href);
-        $this->assertNotEmpty($datastore->featureTypes);
-        $this->assertNotEmpty($datastore->connectionParameters);
-        $this->assertTrue($datastore->enabled);
-    }
-
     public function test_shapefile_can_be_uploaded()
     {
         $data = GeoFile::from(__DIR__ . '/../fixtures/shapefile.shp')->name('shapefile_test');
@@ -58,5 +39,30 @@ class GeoServerDataStoresTest extends TestCase
         $this->assertEquals(0.0, $feature->nativeBoundingBox->minY);
         $this->assertEquals(-1.0, $feature->nativeBoundingBox->maxX);
         $this->assertEquals(-1.0, $feature->nativeBoundingBox->maxY);
+    }
+
+    /**
+     * @depends test_shapefile_can_be_uploaded
+     */
+    public function test_datastore_can_be_retrieved_by_name()
+    {
+        $datastore = $this->geoserver->datastore('shapefile_test');
+
+        $this->assertInstanceOf(DataStore::class, $datastore);
+        $this->assertEquals(getenv('GEOSERVER_WORKSPACE'), $datastore->workspace);
+        $this->assertEmpty($datastore->href);
+        $this->assertNotEmpty($datastore->featureTypes);
+        $this->assertNotEmpty($datastore->connectionParameters);
+        $this->assertTrue($datastore->enabled);
+    }
+
+    /**
+     * @depends test_shapefile_can_be_uploaded
+     */
+    public function test_datastores_are_retrieved()
+    {
+        $datastores = $this->geoserver->datastores();
+
+        $this->assertContainsOnlyInstancesOf(DataStore::class, $datastores);
     }
 }

@@ -13,6 +13,7 @@ use OneOffTech\GeoServer\Contracts\Authentication;
 use OneOffTech\GeoServer\Http\Responses\FeatureResponse;
 use OneOffTech\GeoServer\Http\Responses\WorkspaceResponse;
 use OneOffTech\GeoServer\Http\Responses\DataStoreResponse;
+use OneOffTech\GeoServer\Exception\ErrorResponseException;
 use OneOffTech\GeoServer\Exception\AuthTypeNotSupportedException;
 
 final class GeoServer
@@ -70,6 +71,27 @@ final class GeoServer
         $response = $this->get($route, WorkspaceResponse::class);
 
         return $response->workspace;
+    }
+    
+    /**
+     * Create the configured workspace, if not existing
+     *
+     * @uses the workspace specified during client instantiation
+     *
+     * @return \OneOffTech\GeoServer\Models\Workspace
+     */
+    public function createWorkspace()
+    {
+        try {
+            $route = $this->routes->url("workspaces");
+
+            $response = $this->post($route, ['workspace' => [ 'name' => $this->workspace] ]);
+        } catch (ErrorResponseException $ex) {
+            if ($ex->getCode() !== 401) {
+                throw $ex;
+            }
+        }
+        return $this->workspace();
     }
 
     /**
