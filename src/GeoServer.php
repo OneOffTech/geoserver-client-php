@@ -42,6 +42,7 @@ final class GeoServer
     }
 
     /**
+     * Get the GeoServer version
      *
      * @return string
      */
