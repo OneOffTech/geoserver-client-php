@@ -20,7 +20,7 @@
         <env name="GEOSERVER_URL" value=""/>
         <env name="GEOSERVER_USER" value=""/>
         <env name="GEOSERVER_PASSWORD" value=""/>
-        <env name="GEOSERVER_WORKSPACE" value="default"/>
+        <env name="GEOSERVER_WORKSPACE" value="test"/>
     </php>
     <filter>
         <blacklist>
