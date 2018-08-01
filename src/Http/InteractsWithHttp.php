@@ -49,7 +49,6 @@ trait InteractsWithHttp
 
                 throw new ErrorResponseException($reason, $response->getStatusCode(), (string)$responseBody);
             }
-            dump((string)$responseBody);
             throw new ErrorResponseException(!empty($response->getReasonPhrase()) ? $response->getReasonPhrase() : 'There was a problem in fulfilling your request.', $response->getStatusCode(), (string)$responseBody);
         }
     }
