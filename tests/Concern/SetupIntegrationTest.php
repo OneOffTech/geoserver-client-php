@@ -25,5 +25,7 @@ trait SetupIntegrationTest
         $auth = new Authentication(getenv('GEOSERVER_USER'), getenv('GEOSERVER_PASSWORD'));
 
         $this->geoserver = GeoServer::build($url, $workspace, $auth);
+
+        $this->geoserver->createWorkspace();
     }
 }

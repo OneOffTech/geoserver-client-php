@@ -2,24 +2,26 @@
 
 namespace OneOffTech\GeoServer;
 
-use OneOffTech\GeoServer\Contracts\Authentication;
-
-use JMS\Serializer\Serializer;
-// use JMS\Serializer\EventDispatcher\EventDispatcher;
-use OneOffTech\GeoServer\Exception\AuthTypeNotSupportedException;
-
-use OneOffTech\GeoServer\Auth\NullAuthentication;
-
 use OneOffTech\GeoServer\Http\Routes;
 use Psr\Http\Message\ResponseInterface;
-use JMS\Serializer\Exception\Exception as JMSException;
-use OneOffTech\GeoServer\Http\RequestFactory;
-use OneOffTech\GeoServer\Serializer\DeserializeErrorEventSubscriber;
+use OneOffTech\GeoServer\Models\Feature;
+use OneOffTech\GeoServer\Models\DataStore;
+use OneOffTech\GeoServer\Models\Workspace;
 use OneOffTech\GeoServer\Http\InteractsWithHttp;
+use OneOffTech\GeoServer\Auth\NullAuthentication;
+use OneOffTech\GeoServer\Contracts\Authentication;
+use OneOffTech\GeoServer\Http\Responses\FeatureResponse;
+use OneOffTech\GeoServer\Http\Responses\WorkspaceResponse;
+use OneOffTech\GeoServer\Http\Responses\DataStoreResponse;
+use OneOffTech\GeoServer\Exception\ErrorResponseException;
+use OneOffTech\GeoServer\Exception\AuthTypeNotSupportedException;
 
 final class GeoServer
 {
     use InteractsWithHttp;
+
+    /** @var string */
+    private $workspace;
 
     /** @var  Routes */
     private $routes;
@@ -35,11 +37,12 @@ final class GeoServer
         $this->httpClient = $options->httpClient;
         $this->messageFactory = $options->messageFactory;
         $this->routes = new Routes($url);
-        // $this->apiRequestFactory = new RequestFactory;
         $this->serializer = $options->serializer;
+        $this->workspace = $workspace;
     }
 
     /**
+     * Get the GeoServer version
      *
      * @return string
      */
@@ -55,6 +58,114 @@ final class GeoServer
     }
 
 
+    /**
+     * Retrieve the workspace information.
+     *
+     * @uses the workspace specified during client instantiation
+     *
+     * @return \OneOffTech\GeoServer\Models\Workspace
+     */
+    public function workspace()
+    {
+        $route = $this->routes->url("workspaces/$this->workspace");
+
+        $response = $this->get($route, WorkspaceResponse::class);
+
+        return $response->workspace;
+    }
+    
+    /**
+     * Create the configured workspace, if not existing
+     *
+     * @uses the workspace specified during client instantiation
+     *
+     * @return \OneOffTech\GeoServer\Models\Workspace
+     */
+    public function createWorkspace()
+    {
+        try {
+            $route = $this->routes->url("workspaces");
+
+            $response = $this->post($route, ['workspace' => [ 'name' => $this->workspace] ]);
+        } catch (ErrorResponseException $ex) {
+            if ($ex->getCode() !== 401) {
+                throw $ex;
+            }
+        }
+        return $this->workspace();
+    }
+
+    /**
+     * Retrieve the list of datastores defined in the workspace.
+     * A data store contains vector format spatial data.
+     *
+     * @uses the workspace specified during client instantiation
+     *
+     * @return \OneOffTech\GeoServer\Models\DataStore[]
+     */
+    public function datastores()
+    {
+        $route = $this->routes->url("workspaces/$this->workspace/datastores");
+
+        $response = $this->get($route, DataStoreResponse::class);
+
+        return $response->dataStores;
+    }
+
+    /**
+     * Retrieve the details of a data store.
+     * A data store contains vector format spatial data. It can be a file (such as a shapefile),...
+     *
+     * @uses the workspace specified during client instantiation
+     *
+     * @param string $name The data store name
+     * @return \OneOffTech\GeoServer\Models\DataStore
+     */
+    public function datastore($name)
+    {
+        $route = $this->routes->url("workspaces/$this->workspace/datastores/$name");
+
+        $response = $this->get($route, DataStore::class);
+
+        return $response;
+    }
+
+    /**
+     *
+     * A feature is a vector based spatial resource or data set that originates from a data store.
+     * In some cases, such as with a shapefile, a feature type has a one-to-one relationship with its
+     * data store. In other cases, such as PostGIS, the relationship of feature type to data store
+     * is many-to-one, feature types corresponding to a table in the database.
+     *
+     * @param string $datastore The datastore from which retrieve the
+     * @param string $name The feature name to retrieve
+     * @return \OneOffTech\GeoServer\Models\Feature
+     */
+    public function feature($datastore, $name = null)
+    {
+        $feature = $name ?? $datastore;
+        $route = $this->routes->url("workspaces/$this->workspace/datastores/$datastore/featuretypes/$feature");
+
+        $response = $this->get($route, FeatureResponse::class);
+
+        return $response->feature;
+    }
+
+
+    /**
+     * Upload data to the pertaining store
+     *
+     * Raster data will be added to a coveragestore
+     *
+     */
+    public function upload(GeoFile $data)
+    {
+        $route = $this->routes->url("workspaces/$this->workspace/datastores/$data->name/file.{$data->extension}");
+
+        $this->putFile($route, $data);
+
+        return $this->feature($data->name);
+    }
 
     /**
      * Build a GeoServer client
