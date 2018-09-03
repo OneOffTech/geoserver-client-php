@@ -146,6 +146,7 @@ final class GeoServer
      *
      * @param string $name The data store name
      * @return \OneOffTech\GeoServer\Models\DataStore
+     * @throws \OneOffTech\GeoServer\Exception\StoreNotFoundException if the data store to remove do not exists
      */
     public function deleteDatastore($name)
     {
@@ -196,6 +197,25 @@ final class GeoServer
         $this->putFile($route, $data);
 
         return $this->feature($data->name);
+    }
+
+    /**
+     * Delete a GeoFile from the GeoServer instance
+     * 
+     * Deletes the corresponding store based on the GeoType format
+     * 
+     * @param GeoFile $data The GeoFile to delete
+     * @return bool
+     * @throws \OneOffTech\GeoServer\Exception\StoreNotFoundException if the store, that corresponds to the file, do not exists
+     */
+    public function remove(GeoFile $data)
+    {
+        if($data->type === GeoType::VECTOR){
+            $this->deleteDatastore($data->name);
+            return true;
+        }
+
+        return false;
     }
 
     /**

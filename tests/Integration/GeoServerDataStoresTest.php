@@ -96,4 +96,18 @@ class GeoServerDataStoresTest extends TestCase
 
         $datastore = $this->geoserver->datastore('some_name');
     }
+
+    public function test_shapefile_can_be_uploaded_and_deleted()
+    {
+        $datastoreName = 'shapefile_test' . time();
+        $data = GeoFile::from(__DIR__ . '/../fixtures/shapefile.shp')->name($datastoreName);
+
+        $feature = $this->geoserver->upload($data);
+
+        $this->assertInstanceOf(Feature::class, $feature);
+        
+        $deleteResult = $this->geoserver->remove($data);
+
+        $this->assertTrue($deleteResult, "GeoFile not deleted");
+    }
 }
