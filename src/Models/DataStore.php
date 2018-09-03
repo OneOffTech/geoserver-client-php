@@ -57,4 +57,16 @@ class DataStore extends Model
      * @JMS\SerializedName("connectionParameters")
      */
     public $connectionParameters;
+
+
+    /**
+     * Indicates if the data store exists.
+     *
+     * It is used to indicate the deletion status.
+     * The $exists value is set to false after succesfull deletion.
+     *
+     * @var bool
+     * @JMS\Exclude
+     */
+    public $exists = true;
 }
