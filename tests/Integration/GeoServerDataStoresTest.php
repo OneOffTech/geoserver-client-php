@@ -11,6 +11,7 @@ use Tests\Concern\SetupIntegrationTest;
 use OneOffTech\GeoServer\Models\Workspace;
 use OneOffTech\GeoServer\Models\DataStore;
 use OneOffTech\GeoServer\Models\Feature;
+use OneOffTech\GeoServer\Exception\StoreNotFoundException;
 
 class GeoServerDataStoresTest extends TestCase
 {
@@ -18,7 +19,8 @@ class GeoServerDataStoresTest extends TestCase
 
     public function test_shapefile_can_be_uploaded()
     {
-        $data = GeoFile::from(__DIR__ . '/../fixtures/shapefile.shp')->name('shapefile_test');
+        $datastoreName = 'shapefile_test';
+        $data = GeoFile::from(__DIR__ . '/../fixtures/shapefile.shp')->name($datastoreName);
 
         $feature = $this->geoserver->upload($data);
 
@@ -39,14 +41,16 @@ class GeoServerDataStoresTest extends TestCase
         $this->assertEquals(0.0, $feature->nativeBoundingBox->minY);
         $this->assertEquals(-1.0, $feature->nativeBoundingBox->maxX);
         $this->assertEquals(-1.0, $feature->nativeBoundingBox->maxY);
+
+        return $datastoreName;
     }
 
     /**
      * @depends test_shapefile_can_be_uploaded
      */
-    public function test_datastore_can_be_retrieved_by_name()
+    public function test_datastore_can_be_retrieved_by_name($datastoreName)
     {
-        $datastore = $this->geoserver->datastore('shapefile_test');
+        $datastore = $this->geoserver->datastore($datastoreName);
 
         $this->assertInstanceOf(DataStore::class, $datastore);
         $this->assertEquals(getenv('GEOSERVER_WORKSPACE'), $datastore->workspace);
@@ -54,15 +58,42 @@ class GeoServerDataStoresTest extends TestCase
         $this->assertNotEmpty($datastore->featureTypes);
         $this->assertNotEmpty($datastore->connectionParameters);
         $this->assertTrue($datastore->enabled);
+        $this->assertTrue($datastore->exists);
+
+        return $datastoreName;
     }
 
     /**
-     * @depends test_shapefile_can_be_uploaded
+     * @depends test_datastore_can_be_retrieved_by_name
      */
-    public function test_datastores_are_retrieved()
+    public function test_datastores_are_retrieved($datastoreName)
     {
         $datastores = $this->geoserver->datastores();
 
         $this->assertContainsOnlyInstancesOf(DataStore::class, $datastores);
+
+        return $datastoreName;
+    }
+
+    /**
+     * @depends test_datastores_are_retrieved
+     */
+    public function test_datastore_can_be_deleted($datastoreName)
+    {
+        $datastore = $this->geoserver->deleteDatastore($datastoreName);
+
+        $this->assertInstanceOf(DataStore::class, $datastore);
+        $this->assertEquals(getenv('GEOSERVER_WORKSPACE'), $datastore->workspace);
+        $this->assertTrue($datastore->enabled);
+        $this->assertFalse($datastore->exists);
+
+        return $datastoreName;
+    }
+
+    public function test_non_existing_datastore_cannot_be_retrieved()
+    {
+        $this->expectException(StoreNotFoundException::class);
+
+        $datastore = $this->geoserver->datastore('some_name');
     }
 }

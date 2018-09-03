@@ -14,6 +14,7 @@ use OneOffTech\GeoServer\Http\Responses\FeatureResponse;
 use OneOffTech\GeoServer\Http\Responses\WorkspaceResponse;
 use OneOffTech\GeoServer\Http\Responses\DataStoreResponse;
 use OneOffTech\GeoServer\Exception\ErrorResponseException;
+use OneOffTech\GeoServer\Exception\StoreNotFoundException;
 use OneOffTech\GeoServer\Exception\AuthTypeNotSupportedException;
 
 final class GeoServer
@@ -125,9 +126,39 @@ final class GeoServer
     {
         $route = $this->routes->url("workspaces/$this->workspace/datastores/$name");
 
-        $response = $this->get($route, DataStore::class);
+        try {
+            $response = $this->get($route, DataStore::class);
+            
+            return $response;
+        } catch (ErrorResponseException $ex) {
+            if ($ex->getMessage() === 'Not Found') {
+                throw StoreNotFoundException::datastore($name);
+            }
 
-        return $response;
+            throw $ex;
+        }
+    }
+
+    /**
+     * Delete a data store
+     *
+     * @uses the workspace specified during client instantiation
+     *
+     * @param string $name The data store name
+     * @return \OneOffTech\GeoServer\Models\DataStore
+     */
+    public function deleteDatastore($name)
+    {
+        $datastore = $this->datastore($name);
+
+        $route = $this->routes->url("workspaces/$this->workspace/datastores/$name?recurse=true");
+
+        $this->delete($route);
+
+        $datastore->exists = false;
+        $datastore->wasRecentlyCreated = false;
+
+        return $datastore;
     }
 
     /**
