@@ -289,7 +289,7 @@ final class GeoServer
 
         $this->putFile($route, $file);
 
-        if(GeoType::VECTOR === $file->type){
+        if (GeoType::VECTOR === $file->type) {
             return $this->feature($file->name);
         }
 
@@ -307,11 +307,10 @@ final class GeoServer
      */
     public function remove(GeoFile $data)
     {
-        if($data->type === GeoType::VECTOR){
+        if ($data->type === GeoType::VECTOR) {
             $this->deleteDatastore($data->name);
             return true;
-        }
-        else if($data->type === GeoType::RASTER){
+        } elseif ($data->type === GeoType::RASTER) {
             $this->deleteCoveragestore($data->name);
             return true;
         }
