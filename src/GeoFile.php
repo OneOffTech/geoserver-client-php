@@ -26,6 +26,21 @@ class GeoFile
     protected $format;
     
     protected $extension;
+    
+    /**
+     * The extension as required by GeoServer
+     * 
+     * e.g. for a geo tiff file the extension must be .geotiff
+     */
+    protected $normalizedExtension;
+
+    /**
+     * The mime type as required by GeoServer
+     * 
+     * e.g. for a geo tiff file the mime type appears to be "geotif/geotiff", 
+     * as found in https://gis.stackexchange.com/questions/218162/creating-coveragestore-geotiff-using-rest-api
+     */
+    protected $normalizedMimeType;
 
     /**
      * The type of the geodata (vector or raster)
@@ -46,6 +61,10 @@ class GeoFile
         $this->mimeType = $mimeType;
         
         $this->extension = $this->file->getExtension();
+        
+        $this->normalizedExtension = TypeResolver::normalizedExtensionFromFormat($format) ?? $this->extension;
+        
+        $this->normalizedMimeType = TypeResolver::normalizedMimeTypeFromFormat($format) ?? $mimeType;
 
         $this->format = $format;
         

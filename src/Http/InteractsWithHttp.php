@@ -133,7 +133,7 @@ trait InteractsWithHttp
     
     protected function putFile($route, $data, $class = null)
     {
-        $request = $this->messageFactory->createRequest('PUT', $route, ['Content-Type' => $data->mimeType], $data->content());
+        $request = $this->messageFactory->createRequest('PUT', $route, ['Content-Type' => $data->normalizedMimeType], $data->content());
 
         $response = $this->handleRequest($request);
 

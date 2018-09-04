@@ -15,6 +15,8 @@ use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
 use JMS\Serializer\EventDispatcher\EventDispatcher;
 use OneOffTech\GeoServer\Serializer\DeserializeDataStoreResponseSubscriber;
+use OneOffTech\GeoServer\Serializer\DeserializeBoundingBoxSubscriber;
+use OneOffTech\GeoServer\Serializer\DeserializeCoverageStoreResponseSubscriber;
 
 final class Options
 {
@@ -63,6 +65,8 @@ final class Options
         $this->serializer = SerializerBuilder::create()
             ->configureListeners(function (EventDispatcher $dispatcher) {
                 $dispatcher->addSubscriber(new DeserializeDataStoreResponseSubscriber());
+                $dispatcher->addSubscriber(new DeserializeBoundingBoxSubscriber());
+                $dispatcher->addSubscriber(new DeserializeCoverageStoreResponseSubscriber());
             })
             ->build();
         ;
