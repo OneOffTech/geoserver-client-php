@@ -26,6 +26,6 @@ final class GeoType
      */
     public static function storeFor($type)
     {
-        return $type === 'vector' ? 'datastore' : 'coveragestore';
+        return $type === 'vector' ? 'datastores' : 'coveragestores';
     }
 }

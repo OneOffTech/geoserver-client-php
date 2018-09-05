@@ -6,12 +6,12 @@ use JMS\Serializer\EventDispatcher\PreDeserializeEvent;
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Pre-Deserialize event for @see \OneOffTech\GeoServer\Models\DataStore
+ * Pre-Deserialize event for @see \OneOffTech\GeoServer\Models\CoverageStore
  *
- * It make sure that data before deserialization into the DataStore class
+ * It make sure that data before deserialization into the CoverageStore class
  * is in the expected format
  */
-class DeserializeDataStoreResponseSubscriber implements EventSubscriberInterface
+class DeserializeCoverageStoreResponseSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
@@ -19,14 +19,14 @@ class DeserializeDataStoreResponseSubscriber implements EventSubscriberInterface
             array(
                 'event' => 'serializer.pre_deserialize',
                 'method' => 'onPreDeserialize',
-                'class' => 'OneOffTech\\GeoServer\\Models\\DataStore',
+                'class' => 'OneOffTech\\GeoServer\\Http\\Responses\\CoverageStoresResponse',
                 'format' => 'json',
-                'priority' => 0,
+                'priority' => 1,
             ),
             array(
                 'event' => 'serializer.pre_deserialize',
                 'method' => 'onPreDeserialize',
-                'class' => 'OneOffTech\\GeoServer\\Http\\Responses\\DataStoreResponse',
+                'class' => 'OneOffTech\\GeoServer\\Models\\CoverageStore',
                 'format' => 'json',
                 'priority' => 0,
             ),
@@ -37,27 +37,24 @@ class DeserializeDataStoreResponseSubscriber implements EventSubscriberInterface
     {
         $data = $event->getData();
 
-        // The DataStoreResponse has an annoying multi-level
+        // The CoverageStoreResponse has an annoying multi-level
         // array. This aims at flatten the array to
         // a single level
-        if (isset($data['dataStores']) && is_array($data['dataStores'])) {
-            $data['dataStores'] = array_map(function ($a) {
+        if (isset($data['coverageStores']) && is_array($data['coverageStores'])) {
+            $data['coverageStores'] = array_map(function ($a) {
                 return isset($a[0]) ? $a[0] : $a;
-            }, array_values($data['dataStores']));
+            }, array_values($data['coverageStores']));
         }
 
-        // The DataStore has an annoying dataStore key that contain
-        // the details. This aims at remove that key when
-        // deserializing a Models\DataStore instance
-        if (isset($data['dataStore']) && is_array($data['dataStore'])) {
-            $data = $data['dataStore'];
-        }
-
-        // The DataStore contain a reference to the workspace by
+        // The CoverageStore contain a reference to the workspace by
         // name and url. For the purpose of keeping the object
         // simple we transform the complex object into string
         if (isset($data['workspace']) && is_array($data['workspace'])) {
             $data['workspace'] = $data['workspace']['name'];
+        }
+
+        if(isset($data['coverages']) && is_string($data['coverages'])){
+            $data['coverages'] = [$data['coverages']];
         }
 
         $event->setData($data);

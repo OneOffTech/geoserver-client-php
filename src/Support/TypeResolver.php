@@ -34,7 +34,7 @@ final class TypeResolver
         GeoFormat::KMZ => GeoType::VECTOR,
         GeoFormat::GPX => GeoType::VECTOR,
         GeoFormat::GEOTIFF => GeoType::RASTER,
-        GeoFormat::GEOPACKAGE => GeoType::RASTER,
+        // GeoFormat::GEOPACKAGE => GeoType::RASTER,
 
         GeoType::VECTOR => [
             GeoFormat::SHAPEFILE,
@@ -46,8 +46,29 @@ final class TypeResolver
         ],
         GeoType::RASTER => [
             GeoFormat::GEOTIFF,
-            GeoFormat::GEOPACKAGE,
+            // GeoFormat::GEOPACKAGE,
         ]
+    ];
+
+    /**
+     * The file extension, given the file format, as accepted by GeoServer
+     */
+    protected static $normalizedFormatFileExtensions = [
+        GeoFormat::SHAPEFILE => 'shp',
+        GeoFormat::SHAPEFILE_ZIP => 'zip',
+        GeoFormat::GEOJSON => 'json',
+        GeoFormat::KML => 'kml',
+        GeoFormat::KMZ => 'kmz',
+        GeoFormat::GPX => 'gpx',
+        GeoFormat::GEOTIFF => 'geotiff',
+        // GeoFormat::GEOPACKAGE => 'gpkg',
+    ];
+
+    /**
+     * The file mime type, given the file format, as accepted by GeoServer
+     */
+    protected static $normalizedMimeTypeFileFormat = [
+        GeoFormat::GEOTIFF => 'geotif/geotiff', // as found on https://gis.stackexchange.com/questions/218162/creating-coveragestore-geotiff-using-rest-api
     ];
     
 
@@ -148,5 +169,25 @@ final class TypeResolver
     public static function convertFormatToType($format)
     {
         return !is_null($format) && isset(static::$typesMap[$format]) ? static::$typesMap[$format] : null;
+    }
+
+    /**
+     * Get the GeoServer accepted file extension for the specific file format
+     * 
+     * @return string|null The normalized extension or null in case no conversion is required
+     */
+    public static function normalizedExtensionFromFormat($format)
+    {
+        return !is_null($format) && isset(static::$normalizedFormatFileExtensions[$format]) ? static::$normalizedFormatFileExtensions[$format] : null;
+    }
+
+    /**
+     * Get the GeoServer accepted file mime type for the specific file format
+     * 
+     * @return string|null The normalized mime type or null in case no conversion is required
+     */
+    public static function normalizedMimeTypeFromFormat($format)
+    {
+        return !is_null($format) && isset(static::$normalizedMimeTypeFileFormat[$format]) ? static::$normalizedMimeTypeFileFormat[$format] : null;
     }
 }
