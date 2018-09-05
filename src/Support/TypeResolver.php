@@ -34,7 +34,7 @@ final class TypeResolver
         GeoFormat::KMZ => GeoType::VECTOR,
         GeoFormat::GPX => GeoType::VECTOR,
         GeoFormat::GEOTIFF => GeoType::RASTER,
-        GeoFormat::GEOPACKAGE => GeoType::RASTER,
+        // GeoFormat::GEOPACKAGE => GeoType::RASTER,
 
         GeoType::VECTOR => [
             GeoFormat::SHAPEFILE,
@@ -46,7 +46,7 @@ final class TypeResolver
         ],
         GeoType::RASTER => [
             GeoFormat::GEOTIFF,
-            GeoFormat::GEOPACKAGE,
+            // GeoFormat::GEOPACKAGE,
         ]
     ];
 
@@ -61,7 +61,7 @@ final class TypeResolver
         GeoFormat::KMZ => 'kmz',
         GeoFormat::GPX => 'gpx',
         GeoFormat::GEOTIFF => 'geotiff',
-        GeoFormat::GEOPACKAGE => 'geopackage',
+        // GeoFormat::GEOPACKAGE => 'gpkg',
     ];
 
     /**
