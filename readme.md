@@ -11,8 +11,9 @@ As of now it offers the following features:
 * [x] Retrieve workspace details
 * [x] List existing datastores
 * [x] Create datastores
-* [ ] _WIP_ Upload files
-* [ ] _WIP_ Retrieve uploaded files
+* [x] Create coveragestores
+* [x] Upload files
+* [x] Retrieve uploaded files
 
 > **This package is being actively developed and is not ready for production**
 
@@ -166,10 +167,6 @@ The library is able to recognize:
 
 - `Shapefile`
 - `Shapefile` inside `zip` archive
-- `Geojson`
-- `KML`
-- `KMZ`
-- `GPX`
 - `GeoTIFF`
 
 You can check if a file is supported using
@@ -180,6 +177,10 @@ use OneOffTech\GeoServer\GeoFile;
 $isSupported = GeoFile::isSupported($path);
 // => true/false
 ```
+
+> The library supports only the file formats that can be uploaded to a GeoServer. 
+> For example `Geojson`, `KML` and `GPX` are not supported out-of-the-box by GeoServer,
+> although plugins might be available for doing that
 
 ## Testing
 
