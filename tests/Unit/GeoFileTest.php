@@ -13,11 +13,6 @@ class GeoFileTest extends TestCase
         return [
             [__DIR__ . '/../fixtures/shapefile.shp'],
             [__DIR__ . '/../fixtures/shapefile.zip'],
-            [__DIR__ . '/../fixtures/geojson.geojson'],
-            [__DIR__ . '/../fixtures/geojson-in-plain-json.json'],
-            [__DIR__ . '/../fixtures/kml.kml'],
-            [__DIR__ . '/../fixtures/kmz.kmz'],
-            [__DIR__ . '/../fixtures/gpx.gpx'],
             [__DIR__ . '/../fixtures/geotiff.tiff'],
         ];
     }
@@ -28,6 +23,11 @@ class GeoFileTest extends TestCase
             [__DIR__ . '/../fixtures/plain.json'],
             [__DIR__ . '/../fixtures/plain.zip'],
             [__DIR__ . '/../fixtures/tiff.tif'],
+            [__DIR__ . '/../fixtures/geojson.geojson'],
+            [__DIR__ . '/../fixtures/geojson-in-plain-json.json'],
+            [__DIR__ . '/../fixtures/kml.kml'],
+            [__DIR__ . '/../fixtures/kmz.kmz'],
+            [__DIR__ . '/../fixtures/gpx.gpx'],
         ];
     }
 
@@ -71,71 +71,6 @@ class GeoFileTest extends TestCase
         $this->assertEquals('application/zip', $file->mimeType);
         $this->assertEquals('zip', $file->extension);
         $this->assertEquals('shapefile.zip', $file->name);
-        $this->assertEquals($file->originalName, $file->name);
-    }
-    
-    public function test_geojson_is_recognized_from_plain_json_file()
-    {
-        $file = GeoFile::from(__DIR__ . '/../fixtures/geojson-in-plain-json.json');
-
-        $this->assertInstanceOf(GeoFile::class, $file);
-        $this->assertEquals(GeoFormat::GEOJSON, $file->format);
-        $this->assertEquals(GeoType::VECTOR, $file->type);
-        $this->assertEquals('application/geo+json', $file->mimeType);
-        $this->assertEquals('json', $file->extension);
-        $this->assertEquals('geojson-in-plain-json.json', $file->name);
-        $this->assertEquals($file->originalName, $file->name);
-    }
-    
-    public function test_geojson_is_recognized()
-    {
-        $file = GeoFile::from(__DIR__ . '/../fixtures/geojson.geojson');
-
-        $this->assertInstanceOf(GeoFile::class, $file);
-        $this->assertEquals(GeoFormat::GEOJSON, $file->format);
-        $this->assertEquals(GeoType::VECTOR, $file->type);
-        $this->assertEquals('application/geo+json', $file->mimeType);
-        $this->assertEquals('geojson', $file->extension);
-        $this->assertEquals('geojson.geojson', $file->name);
-        $this->assertEquals($file->originalName, $file->name);
-    }
-    
-    public function test_kml_is_recognized()
-    {
-        $file = GeoFile::from(__DIR__ . '/../fixtures/kml.kml');
-
-        $this->assertInstanceOf(GeoFile::class, $file);
-        $this->assertEquals(GeoFormat::KML, $file->format);
-        $this->assertEquals(GeoType::VECTOR, $file->type);
-        $this->assertEquals('application/vnd.google-earth.kml+xml', $file->mimeType);
-        $this->assertEquals('kml', $file->extension);
-        $this->assertEquals('kml.kml', $file->name);
-        $this->assertEquals($file->originalName, $file->name);
-    }
-
-    public function test_kmz_is_recognized()
-    {
-        $file = GeoFile::from(__DIR__ . '/../fixtures/kmz.kmz');
-
-        $this->assertInstanceOf(GeoFile::class, $file);
-        $this->assertEquals(GeoFormat::KMZ, $file->format);
-        $this->assertEquals(GeoType::VECTOR, $file->type);
-        $this->assertEquals('application/vnd.google-earth.kmz', $file->mimeType);
-        $this->assertEquals('kmz', $file->extension);
-        $this->assertEquals('kmz.kmz', $file->name);
-        $this->assertEquals($file->originalName, $file->name);
-    }
-
-    public function test_gpx_is_recognized()
-    {
-        $file = GeoFile::from(__DIR__ . '/../fixtures/gpx.gpx');
-
-        $this->assertInstanceOf(GeoFile::class, $file);
-        $this->assertEquals(GeoFormat::GPX, $file->format);
-        $this->assertEquals(GeoType::VECTOR, $file->type);
-        $this->assertEquals('application/gpx+xml', $file->mimeType);
-        $this->assertEquals('gpx', $file->extension);
-        $this->assertEquals('gpx.gpx', $file->name);
         $this->assertEquals($file->originalName, $file->name);
     }
 
