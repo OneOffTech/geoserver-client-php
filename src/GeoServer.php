@@ -6,6 +6,7 @@ use Exception;
 use OneOffTech\GeoServer\Http\Routes;
 use Psr\Http\Message\ResponseInterface;
 use OneOffTech\GeoServer\Models\Feature;
+use OneOffTech\GeoServer\Models\Resource;
 use OneOffTech\GeoServer\Models\DataStore;
 use OneOffTech\GeoServer\Models\Workspace;
 use OneOffTech\GeoServer\Models\CoverageStore;
@@ -281,7 +282,7 @@ final class GeoServer
      * Raster data will be added to a coverage store
      *
      * @param GeoFile $file
-     * @return \OneOffTech\GeoServer\Models\Feature|\OneOffTech\GeoServer\Models\Coverage The information about the uploaded coverage or raster feature
+     * @return \OneOffTech\GeoServer\Models\Resource The resource that was uploaded. Can be a Coverage for raster data or Feature for vector data
      */
     public function upload(GeoFile $file)
     {

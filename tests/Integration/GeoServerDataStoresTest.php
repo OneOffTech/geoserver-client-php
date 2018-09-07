@@ -4,6 +4,7 @@ namespace Tests\Integration;
 use Tests\TestCase;
 use GuzzleHttp\Psr7\Request;
 use OneOffTech\GeoServer\GeoFile;
+use OneOffTech\GeoServer\GeoType;
 use Psr\Http\Message\RequestInterface;
 use OneOffTech\GeoServer\Exception\ErrorResponseException;
 use OneOffTech\GeoServer\Exception\InvalidDataException;
@@ -25,6 +26,7 @@ class GeoServerDataStoresTest extends TestCase
         $feature = $this->geoserver->upload($data);
 
         $this->assertInstanceOf(Feature::class, $feature);
+        $this->assertEquals(GeoType::VECTOR, $feature->type());
         $this->assertEquals("shapefile_test", $feature->name);
         $this->assertEquals("shapefile_test", $feature->title);
         $this->assertEquals("shapefile_test", $feature->nativeName);
