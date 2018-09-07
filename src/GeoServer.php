@@ -2,6 +2,7 @@
 
 namespace OneOffTech\GeoServer;
 
+use Exception;
 use OneOffTech\GeoServer\Http\Routes;
 use Psr\Http\Message\ResponseInterface;
 use OneOffTech\GeoServer\Models\Feature;
@@ -294,6 +295,33 @@ final class GeoServer
         }
 
         return $this->coverage($file->name);
+    }
+
+
+    /**
+     * Check if a specified GeoFile was uploaded to the Geoserver
+     * The check will attempt to find the store that matches the given name
+     * 
+     * @param GeoFile $file
+     * @return bool
+     */
+    public function exist(GeoFile $file)
+    {
+        $store = $file->type === GeoType::VECTOR ? 'feature' : 'coverage';
+        
+        try{
+            $found = $this->{$store}($file->name);
+    
+            if (!is_null($found)) {
+                return true;
+            }
+    
+            return false;
+            
+        }catch(Exception $ex){
+            
+            return false;
+        }
     }
 
     /**

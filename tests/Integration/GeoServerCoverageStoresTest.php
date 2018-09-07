@@ -111,9 +111,13 @@ class GeoServerCoverageStoresTest extends TestCase
         $feature = $this->geoserver->upload($data);
 
         $this->assertInstanceOf(Coverage::class, $feature);
+
+        $this->assertTrue($this->geoserver->exist($data), "Data not existing after upload");
         
         $deleteResult = $this->geoserver->remove($data);
 
         $this->assertTrue($deleteResult, "GeoFile not deleted");
+
+        $this->assertFalse($this->geoserver->exist($data), "Data still exists after remove");
     }
 }
