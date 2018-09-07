@@ -6,16 +6,13 @@ The client enables programmatic access to a [GeoServer](http://geoserver.org/) i
 
 As of now it offers the following features:
 
-* [x] Obtain the version of the connected GeoServer instance
-* [x] Create workspace
-* [x] Retrieve workspace details
-* [x] List existing datastores
-* [x] Create datastores
-* [x] Create coveragestores
-* [x] Upload files
-* [x] Retrieve uploaded files
+* [x] Obtain the [version](#get-the-geoserver-version) of the connected GeoServer instance
+* [x] [Create workspace](#create-the-workspace) or retrieve existing workspace details
+* [x] [Create datastores](#data-stores) and listing them
+* [x] [Create coveragestores](#coverage-stores) and listing them
+* [x] [Upload files](#uploading-geographic-files) in various [formats](#supported-file-formats)
 
-> **This package is being actively developed and is not ready for production**
+> **This package is under active developed and is not ready for production**
 
 **Requirements**
 
@@ -33,8 +30,6 @@ composer require php-http/guzzle6-adapter guzzlehttp/psr7 oneofftech/geoserver-c
 ```
 
 The GeoServer client is not hard coupled to [Guzzle](https://github.com/guzzle/guzzle) or any other library that sends HTTP messages. It uses an abstraction called [HTTPlug](http://httplug.io/). This will give you the flexibilty to choose what PSR-7 implementation and HTTP client to use.
-
-
 
 **Why requiring so many packages?**
 
@@ -98,7 +93,7 @@ $workspace = $geoserver->workspace();
 ```
 
 
-#### Datastores
+#### Data stores
 
 A datastore is a container of vector data. A workspace can have multiple data stores.
 
@@ -116,13 +111,48 @@ $datastore = $geoserver->datastore($name);
 // => \OneOffTech\GeoServer\Models\DataStore
 ```
 
+You cal also delete a data store via:
 
-#### Uploading a Shapefile to a workspace
+```php
+$result = $geoserver->deleteDatastore($name);
+// => true || false
+```
+
+#### Coverage stores
+
+A coveragestore is a container of raster data. A workspace can have multiple coverage stores.
+
+You can retrieve all defined coverage stores using the `coveragestores()` method:
+
+```php
+$coveragestores = $geoserver->coveragestores();
+// => array of \OneOffTech\GeoServer\Models\CoverageStore
+```
+
+Or retrieve a coveragestores by name:
+
+```php
+$coveragestore = $geoserver->coveragestore($name);
+// => \OneOffTech\GeoServer\Models\CoverageStore
+```
+
+You cal also delete a coverage store via:
+
+```php
+$result = $geoserver->deleteCoveragestore($name);
+// => true || false
+```
+
+#### Upload and Delete geographic files
+
+##### Uploading geographic files
 
 Uploading a file to a geoserver instance is done via the `upload` method.
 
 The client recognizes the format and create a correct store type, e.g. shapefiles lead to a 
 datastore creation. To do so the file path must be wrapped in a `GeoFile` object.
+
+> See [Supported files](#supported-file-formats) for knowing what the library can handle
 
 ```php
 use OneOffTech\GeoServer\GeoFile;
@@ -155,11 +185,46 @@ use OneOffTech\GeoServer\GeoFile;
 $file = GeoFile::load('path/to/shapefile.shp');
 
 $feature = $geoserver->upload($file);
-// OneOffTech\GeoServer\Models\Feature
+// OneOffTech\GeoServer\Models\Resource
 ```
 
-Once uploaded, the return value will be an instance of the `OneOffTech\GeoServer\Models\Feature`.
+Once uploaded, the return value will be an instance of the `OneOffTech\GeoServer\Models\Resource`.
 It contains the details extracted by the GeoServer, like the bounding box.
+
+`OneOffTech\GeoServer\Models\Resource` has two sub-classes:
+
+- `OneOffTech\GeoServer\Models\Feature` A feature type is a vector based spatial resource or data set that originates from a data store 
+- `OneOffTech\GeoServer\Models\Coverage` A coverage is a raster data set which originates from a coverage store.
+
+##### Verify if a geographic files exists
+
+As a helper method, given a `GeoFile` instance, is possible to verify that a corresponding Feature or Coverage is present.
+
+```php
+use OneOffTech\GeoServer\GeoFile;
+
+$file = GeoFile::load('path/to/shapefile.shp');
+
+$exists = $geoserver->exist($file);
+// true || false
+```
+
+> The identification currently uses the name assigned to the GeoFile
+
+##### Delete a geographic file
+
+As a helper method, given a `GeoFile` instance, is possible to delete the corresponding Feature or Coverage in the Geoserver.
+
+```php
+use OneOffTech\GeoServer\GeoFile;
+
+$file = GeoFile::load('path/to/shapefile.shp');
+
+$removed = $geoserver->remove($file);
+// true || false
+```
+
+> The identification currently uses the name assigned to the GeoFile
 
 ## Supported file formats
 
