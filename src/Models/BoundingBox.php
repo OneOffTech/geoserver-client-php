@@ -44,4 +44,9 @@ class BoundingBox
      * @JMS\Type("string")
      */
     public $crs = null;
+
+    public function toArray()
+    {
+        return [$this->minX, $this->minY, $this->maxX, $this->maxY];
+    }
 }

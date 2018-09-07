@@ -9,8 +9,10 @@ use OneOffTech\GeoServer\Models\Feature;
 use OneOffTech\GeoServer\Models\Resource;
 use OneOffTech\GeoServer\Models\DataStore;
 use OneOffTech\GeoServer\Models\Workspace;
+use OneOffTech\GeoServer\Support\WmsOptions;
 use OneOffTech\GeoServer\Models\CoverageStore;
 use OneOffTech\GeoServer\Http\InteractsWithHttp;
+use OneOffTech\GeoServer\Support\ImageResponse;
 use OneOffTech\GeoServer\Auth\NullAuthentication;
 use OneOffTech\GeoServer\Contracts\Authentication;
 use OneOffTech\GeoServer\Http\Responses\FeatureResponse;
@@ -274,7 +276,6 @@ final class GeoServer
         return $coveragestore;
     }
 
-
     /**
      * Upload a file to the pertaining store
      *
@@ -291,6 +292,11 @@ final class GeoServer
 
         $this->putFile($route, $file);
 
+        return $this->details($file);
+    }
+
+    public function details(GeoFile $file)
+    {
         if (GeoType::VECTOR === $file->type) {
             return $this->feature($file->name);
         }
@@ -345,6 +351,54 @@ final class GeoServer
         }
 
         return false;
+    }
+
+
+    /**
+     * Get the Web Map Service (WMS) map URL for the specified resource
+     * 
+     * @param GeoFile|Resource data the data you want to obtain the WMS url for. If a GeoFile is passed, the corresponding resource is retrieved from the geoserver, if found
+     * @param WmsOption $wmsOptions The options to configure the WMS output
+     */
+    public function wmsMapUrl($data, ?WmsOptions $wmsOptions = null)
+    {
+        if(!($data instanceof GeoFile || $data instanceof Resource)){
+            throw new InvalidArgumentException("Data must be a GeoFile or Resource instance.");
+        }
+
+        $resource = $data instanceof Resource ? $data : $this->details($data);
+
+        $options = $wmsOptions ?? (new WmsOptions())
+            ->layers("$this->workspace:$resource->name")
+            ->boundingBox($resource->boundingBox)
+            ->srs($resource->boundingBox->crs ?? $resource->srs);
+
+        return $this->routes->wms($this->workspace, $options);
+    }
+
+
+    /**
+     * Attempt to retrieve a thumbnail of a previously uploaded 
+     * GeoFile or Resource using the Web Map Service
+     * 
+     * @param GeoFile|Resource data the data you want to obtain the WMS url for. If a GeoFile is passed, the corresponding resource is retrieved from the geoserver, if found
+     * @return resource A resource
+     */
+    public function thumbnail($data, $width = 300, $height = 300)
+    {
+        if(!($data instanceof GeoFile || $data instanceof Resource)){
+            throw new InvalidArgumentException("Data must be a GeoFile or Resource instance.");
+        }
+
+        $resource = $data instanceof Resource ? $data : $this->details($data);
+
+        $url = $this->wmsMapUrl($resource, (new WmsOptions())
+            ->layers("$this->workspace:$resource->name")
+            ->boundingBox($resource->boundingBox)
+            ->size($width, $height)
+            ->srs($resource->boundingBox->crs ?? $resource->srs));
+        
+        return $this->getImage($url);
     }
 
     /**
