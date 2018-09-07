@@ -6,7 +6,7 @@ use JMS\Serializer\Annotation as JMS;
 use OneOffTech\GeoServer\Contracts\Model;
 
 /**
- * A coverage is a raster data set which originates from a coverage store.
+ * A resource that describe both a Coverage or a Feature.
  */
 abstract class Resource extends Model
 {
