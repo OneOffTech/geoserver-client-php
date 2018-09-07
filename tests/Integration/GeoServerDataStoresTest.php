@@ -37,10 +37,11 @@ class GeoServerDataStoresTest extends TestCase
         $this->assertNotNull($feature->keywords);
         $this->assertNotNull($feature->nativeBoundingBox);
         $this->assertNotNull($feature->boundingBox);
-        $this->assertEquals(0.0, $feature->nativeBoundingBox->minX);
-        $this->assertEquals(0.0, $feature->nativeBoundingBox->minY);
-        $this->assertEquals(-1.0, $feature->nativeBoundingBox->maxX);
-        $this->assertEquals(-1.0, $feature->nativeBoundingBox->maxY);
+        $this->assertEquals("EPSG:4326", $feature->boundingBox->crs);
+        $this->assertEquals(314618.446, $feature->boundingBox->minX);
+        $this->assertEquals(5536155.822, $feature->boundingBox->minY);
+        $this->assertEquals(315358.647, $feature->boundingBox->maxX);
+        $this->assertEquals(5536652.114, $feature->boundingBox->maxY);
 
         return $datastoreName;
     }
