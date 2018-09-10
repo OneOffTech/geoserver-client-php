@@ -8,6 +8,7 @@ use Http\Client\HttpClient;
 use Http\Message\MessageFactory;
 use Psr\Http\Message\ResponseInterface;
 use OneOffTech\GeoServer\Http\ResponseHelper;
+use OneOffTech\GeoServer\Support\ImageResponse;
 use OneOffTech\GeoServer\Exception\InvalidDataException;
 use OneOffTech\GeoServer\Exception\SerializationException;
 use OneOffTech\GeoServer\Exception\ErrorResponseException;
@@ -147,5 +148,25 @@ trait InteractsWithHttp
         $response = $this->handleRequest($request);
 
         return $this->deserialize($response, $class);
+    }
+
+    protected function getImage($route)
+    {
+        $request = $this->messageFactory->createRequest('GET', $route, []);
+
+        $response = $this->handleRequest($request);
+
+        $contentTypeHeader = $response->getHeader('Content-Type');
+        $contentType = !empty($contentTypeHeader) ? $contentTypeHeader[0] : '';
+
+        if ($response->getStatusCode() !== 200 && $response->getStatusCode() !== 201 && $response->getStatusCode() !== 204) {
+            throw new ErrorResponseException(!empty($response->getReasonPhrase()) ? $response->getReasonPhrase() : 'There was a problem in fulfilling your request.', $response->getStatusCode(), (string)$responseBody);
+        }
+
+        if(strpos($contentType, 'image') === false){
+            throw new ErrorResponseException("Expected image response, but got [$contentType]", $response->getStatusCode(), (string)$response->getBody());
+        }
+
+        return ImageResponse::from($response);
     }
 }

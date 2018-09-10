@@ -4,6 +4,7 @@ namespace Tests\Integration;
 use Tests\TestCase;
 use GuzzleHttp\Psr7\Request;
 use OneOffTech\GeoServer\GeoFile;
+use OneOffTech\GeoServer\GeoType;
 use Psr\Http\Message\RequestInterface;
 use OneOffTech\GeoServer\Exception\ErrorResponseException;
 use OneOffTech\GeoServer\Exception\InvalidDataException;
@@ -25,6 +26,7 @@ class GeoServerDataStoresTest extends TestCase
         $feature = $this->geoserver->upload($data);
 
         $this->assertInstanceOf(Feature::class, $feature);
+        $this->assertEquals(GeoType::VECTOR, $feature->type());
         $this->assertEquals("shapefile_test", $feature->name);
         $this->assertEquals("shapefile_test", $feature->title);
         $this->assertEquals("shapefile_test", $feature->nativeName);
@@ -37,10 +39,11 @@ class GeoServerDataStoresTest extends TestCase
         $this->assertNotNull($feature->keywords);
         $this->assertNotNull($feature->nativeBoundingBox);
         $this->assertNotNull($feature->boundingBox);
-        $this->assertEquals(0.0, $feature->nativeBoundingBox->minX);
-        $this->assertEquals(0.0, $feature->nativeBoundingBox->minY);
-        $this->assertEquals(-1.0, $feature->nativeBoundingBox->maxX);
-        $this->assertEquals(-1.0, $feature->nativeBoundingBox->maxY);
+        $this->assertEquals("EPSG:4326", $feature->boundingBox->crs);
+        $this->assertEquals(314618.446, $feature->boundingBox->minX);
+        $this->assertEquals(5536155.822, $feature->boundingBox->minY);
+        $this->assertEquals(315358.647, $feature->boundingBox->maxX);
+        $this->assertEquals(5536652.114, $feature->boundingBox->maxY);
 
         return $datastoreName;
     }
@@ -105,9 +108,13 @@ class GeoServerDataStoresTest extends TestCase
         $feature = $this->geoserver->upload($data);
 
         $this->assertInstanceOf(Feature::class, $feature);
+
+        $this->assertTrue($this->geoserver->exist($data), "Data not existing after upload");
         
         $deleteResult = $this->geoserver->remove($data);
 
         $this->assertTrue($deleteResult, "GeoFile not deleted");
+
+        $this->assertFalse($this->geoserver->exist($data), "Data still exists after remove");
     }
 }
