@@ -12,6 +12,7 @@ final class TypeResolver
         GeoFormat::SHAPEFILE => 'application/octet-stream', // shapefile
         GeoFormat::SHAPEFILE_ZIP => 'application/zip', // shapefile in ZIP container
         GeoFormat::GEOTIFF => 'image/tiff', // geotiff
+        GeoFormat::SLD => 'application/vnd.ogc.sld+xml', // geotiff
     ];
     
     protected static $mimeTypeToFormat = [];
@@ -80,6 +81,14 @@ final class TypeResolver
             }
         } elseif ($mimeType === 'image/tiff' && BinaryReader::isGeoTiff($path)) {
             $format = GeoFormat::GEOTIFF;
+        } elseif ($mimeType === 'application/xml') {
+
+            // check if Style tag is present
+            $data = join('', TextReader::readLines($path, 2));
+            if (strpos($data, '<StyledLayerDescriptor') !== false) {
+                $format = GeoFormat::SLD;
+                $mimeType = self::$mimeTypes[GeoFormat::SLD];
+            }
         }
         
         $type = self::convertFormatToType($format);

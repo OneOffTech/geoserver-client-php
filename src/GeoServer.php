@@ -4,6 +4,7 @@ namespace OneOffTech\GeoServer;
 
 use Exception;
 use OneOffTech\GeoServer\Http\Routes;
+use OneOffTech\GeoServer\Models\Style;
 use Psr\Http\Message\ResponseInterface;
 use OneOffTech\GeoServer\Models\Feature;
 use OneOffTech\GeoServer\Models\Resource;
@@ -22,7 +23,9 @@ use OneOffTech\GeoServer\Http\Responses\WorkspaceResponse;
 use OneOffTech\GeoServer\Http\Responses\DataStoreResponse;
 use OneOffTech\GeoServer\Exception\ErrorResponseException;
 use OneOffTech\GeoServer\Exception\StoreNotFoundException;
+use OneOffTech\GeoServer\Exception\StyleNotFoundException;
 use OneOffTech\GeoServer\Http\Responses\CoverageStoreResponse;
+use OneOffTech\GeoServer\Exception\StyleAlreadyExistsException;
 use OneOffTech\GeoServer\Http\Responses\CoverageStoresResponse;
 use OneOffTech\GeoServer\Exception\AuthTypeNotSupportedException;
 
@@ -435,6 +438,86 @@ final class GeoServer
             ->srs($resource->boundingBox->crs ?? $resource->srs));
         
         return $this->getImage($url);
+    }
+
+
+
+    /**
+     * Get a style by its name. 
+     * The style must be in the current workspace
+     * 
+     * @param string $name
+     * @return Style
+     * @throws StyleNotFoundException if the style with the given name cannot be found
+     * @throws ErrorResponseException for communication errors with the GeoServer
+     */
+    public function style($name)
+    {
+        $route = $this->routes->url("workspaces/$this->workspace/styles/$name");
+
+        try {
+            $response = $this->get($route, Style::class);
+            
+            return $response;
+        } catch (ErrorResponseException $ex) {
+            if ($ex->getMessage() === 'Not Found') {
+                throw StyleNotFoundException::style($name, $this->workspace);
+            }
+
+            throw $ex;
+        }
+    }
+    
+    /**
+     * Get all the styles defined in the current workspace
+     * 
+     * @return Style[] 
+     */
+    public function styles()
+    {
+        $route = $this->routes->url("workspaces/$this->workspace/styles");
+
+        $response = $this->get($route, DataStoreResponse::class);
+
+        return $response->dataStores;
+    }
+
+    /**
+     * 
+     * @throws StyleAlreadyExistsException
+     */
+    public function uploadStyle(StyleFile $file)
+    {
+        $initialPostRoute = $this->routes->url("workspaces/$this->workspace/styles");
+        $filePutRoute = $this->routes->url("styles/$file->name");
+
+        dump(compact('initialPostRoute', 'filePutRoute'));
+
+        try{
+
+            $postResponse = $this->post($initialPostRoute, [
+                'style' => [
+                    'name' => $file->name,
+                    'filename' => $file->originalName,
+                ]
+            ]);
+        }catch(ErrorResponseException $ex){
+            // we receive a 500 error response if the style already exists
+            if($ex->getData() === "Style named '$file->name' already exists in workspace $this->workspace"){
+                throw StyleAlreadyExistsException::style($file->name, $this->workspace);
+            }
+
+            throw $ex;
+        }
+
+        $putFileResponse = $this->putFile($filePutRoute, $file);
+
+        dd($putFileResponse);
+    }
+
+    public function removeStyle()
+    {
+
     }
 
     /**
