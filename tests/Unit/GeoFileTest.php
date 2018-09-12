@@ -105,8 +105,6 @@ class GeoFileTest extends TestCase
         $this->assertEquals(GeoFormat::SHAPEFILE_ZIP, $copy->format);
         $this->assertEquals(GeoType::VECTOR, $copy->type);
         $this->assertEquals('application/zip', $copy->mimeType);
-        $this->assertEquals('tmp', $copy->extension);
-        $this->assertContains(substr($file->name, 0, 3), $copy->originalName);
         $this->assertNotEquals($copy->originalName, $copy->name);
         $this->assertEquals($file->name, $copy->name);
         $this->assertEquals($file->content(), $copy->content());
