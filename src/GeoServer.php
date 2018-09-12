@@ -9,6 +9,7 @@ use OneOffTech\GeoServer\Models\Feature;
 use OneOffTech\GeoServer\Models\Resource;
 use OneOffTech\GeoServer\Models\DataStore;
 use OneOffTech\GeoServer\Models\Workspace;
+use OneOffTech\GeoServer\Support\ZipReader;
 use OneOffTech\GeoServer\Support\WmsOptions;
 use OneOffTech\GeoServer\Models\CoverageStore;
 use OneOffTech\GeoServer\Http\InteractsWithHttp;
@@ -290,7 +291,42 @@ final class GeoServer
         $store = GeoType::storeFor($file->type);
         $route = $this->routes->url("workspaces/$this->workspace/$store/$file->name/file.{$file->normalizedExtension}");
 
-        $this->putFile($route, $file);
+        // if ZIP shpefile and name was changed from original filename
+        // we need to rename all files contained in it
+        if($file->format === GeoFormat::SHAPEFILE_ZIP && $file->wasRenamed()){
+            $contentList = ZipReader::contentList($file->path());
+            $nameWithoutExtension = rtrim($file->name, $file->extension);
+            
+            // check the content if modifications are required
+            if(!in_array("$nameWithoutExtension.shp", $contentList)){
+
+                // if yes, clone the content and do the filename edits to 
+                // make sure that files inside the zip are correctly named
+                $copy = $file->copy();
+                
+                ZipReader::tap($copy->path(), function($zip) use ($contentList, $nameWithoutExtension) {
+                    foreach ($contentList as $entry) {
+                        $entryExtension = pathinfo($entry, PATHINFO_EXTENSION);
+                        $newEntryName = "$nameWithoutExtension.$entryExtension";
+                        $zip->renameName($entry, $newEntryName);
+                    }
+                });
+
+                try{
+                    $this->putFile($route, $copy);
+                }catch(Exception $ex){
+                    throw $ex;
+                } finally {
+                    unlink($copy->path());
+                }
+            }
+            else {
+                $this->putFile($route, $file);
+            }
+        }
+        else {
+            $this->putFile($route, $file);
+        }
 
         return $this->details($file);
     }

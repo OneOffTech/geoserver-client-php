@@ -35,7 +35,7 @@ final class TypeResolver
      */
     protected static $normalizedFormatFileExtensions = [
         GeoFormat::SHAPEFILE => 'shp',
-        GeoFormat::SHAPEFILE_ZIP => 'zip',
+        GeoFormat::SHAPEFILE_ZIP => 'shp',
         GeoFormat::GEOTIFF => 'geotiff',
     ];
 
@@ -44,6 +44,7 @@ final class TypeResolver
      */
     protected static $normalizedMimeTypeFileFormat = [
         GeoFormat::GEOTIFF => 'geotif/geotiff', // as found on https://gis.stackexchange.com/questions/218162/creating-coveragestore-geotiff-using-rest-api
+        GeoFormat::SHAPEFILE_ZIP => 'application/zip',
     ];
     
 

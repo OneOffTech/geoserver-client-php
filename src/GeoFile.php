@@ -87,6 +87,26 @@ class GeoFile
         return $this;
     }
 
+    /**
+     * Tell if the name attribute is different from the original filename
+     * 
+     * @return bool
+     */
+    public function wasRenamed()
+    {
+        return $this->name !== $this->originalName;
+    }
+
+    /**
+     * Get the path to the file
+     * 
+     * @return string
+     */
+    public function path()
+    {
+        return $this->file->getRealPath();
+    }
+
     public function content()
     {
         return file_get_contents($this->file->getRealPath());
@@ -96,6 +116,25 @@ class GeoFile
     public function __get($property)
     {
         return $this->$property;
+    }
+
+
+    /**
+     * Copy the GeoFile content into a temporary folder and return the new GeoFile instance
+     * 
+     * Please note that the temporary file is not disposed automatically
+     * 
+     * @param string $temporaryFolder 
+     * @return GeoFile
+     */
+    public function copy($temporaryFolder = null)
+    {
+        $tmpfilename = tempnam($temporaryFolder ?? sys_get_temp_dir(), $this->name);
+        $handle = fopen($tmpfilename, "w+b");
+        fwrite($handle, $this->content());
+        fclose($handle);
+
+        return GeoFile::from($tmpfilename)->name($this->name);
     }
 
     /**
