@@ -4,7 +4,7 @@ namespace OneOffTech\GeoServer;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Http\Client\Common\Plugin\AuthenticationPlugin;
-use Http\Client\Common\Plugin\HeaderSetPlugin;
+use Http\Client\Common\Plugin\HeaderDefaultsPlugin;
 use Http\Client\Common\PluginClient;
 use Http\Client\HttpClient;
 use Http\Discovery\HttpClientDiscovery;
@@ -53,7 +53,7 @@ final class Options
             HttpClientDiscovery::find(),
             [
                 new AuthenticationPlugin($this->authentication),
-                new HeaderSetPlugin([
+                new HeaderDefaultsPlugin([
                     'User-Agent' => 'OneOffTech GeoServer Client',
                     'Content-Type' => self::FORMAT_JSON,
                     'Accept' => self::FORMAT_JSON

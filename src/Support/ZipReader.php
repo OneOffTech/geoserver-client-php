@@ -53,8 +53,29 @@ final class ZipReader extends FileReader
         return count($entries) > 0;
     }
 
-    // public static function getFileFrom($path)
-    // {
-    //     // dump($za->getFromIndex(0));
-    // }
+    /**
+     * Tap into the Zip Archive
+     * 
+     * After the callback is executed the ZIP archive is closed and saved
+     * 
+     * @param string The zip file path
+     * @param callable The function to execute when the zip file is opened. This function receive a ZipArchive instance as argument
+     * @return string The zip file path
+     */
+    public static function tap($path, $callback)
+    {
+        $za = new ZipArchive;
+        $za->open($path);
+
+        try{
+            $callback($za);
+        }catch(Exception $ex){
+            throw $ex;
+        } finally {
+            $za->close();
+        }
+
+        return $path;
+    }
+
 }
