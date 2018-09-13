@@ -13,7 +13,7 @@ As of now it offers the following features:
 * [x] [Upload files](#uploading-geographic-files) in various [formats](#supported-file-formats)
 * [x] [Manage styles](#styles) in SLD format
 
-> **This package is under active developed and is not ready for production**
+If you find issues or want to contribute a feature, [open an issue first](https://github.com/OneOffTech/geoserver-client-php/issues/new)
 
 **Requirements**
 
