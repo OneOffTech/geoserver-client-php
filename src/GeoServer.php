@@ -17,6 +17,7 @@ use OneOffTech\GeoServer\Http\InteractsWithHttp;
 use OneOffTech\GeoServer\Support\ImageResponse;
 use OneOffTech\GeoServer\Auth\NullAuthentication;
 use OneOffTech\GeoServer\Contracts\Authentication;
+use OneOffTech\GeoServer\Http\Responses\StylesResponse;
 use OneOffTech\GeoServer\Http\Responses\FeatureResponse;
 use OneOffTech\GeoServer\Http\Responses\CoverageResponse;
 use OneOffTech\GeoServer\Http\Responses\WorkspaceResponse;
@@ -447,7 +448,7 @@ final class GeoServer
      * The style must be in the current workspace
      * 
      * @param string $name
-     * @return Style
+     * @return \OneOffTech\GeoServer\Models\Style
      * @throws StyleNotFoundException if the style with the given name cannot be found
      * @throws ErrorResponseException for communication errors with the GeoServer
      */
@@ -457,7 +458,6 @@ final class GeoServer
 
         try {
             $response = $this->get($route, Style::class);
-            
             return $response;
         } catch (ErrorResponseException $ex) {
             if ($ex->getMessage() === 'Not Found') {
@@ -471,27 +471,32 @@ final class GeoServer
     /**
      * Get all the styles defined in the current workspace
      * 
-     * @return Style[] 
+     * @return \OneOffTech\GeoServer\Models\Style[] 
      */
     public function styles()
     {
         $route = $this->routes->url("workspaces/$this->workspace/styles");
 
-        $response = $this->get($route, DataStoreResponse::class);
+        $response = $this->get($route, StylesResponse::class);
 
-        return $response->dataStores;
+        $eagerLoaded = array_map(function($style){
+            return $this->style($style->name);
+        }, $response->styles);
+
+        return $eagerLoaded;
     }
 
     /**
+     * Upload a SLD style to the workspace
      * 
+     * @param StyleFile $file The style file
+     * @return \OneOffTech\GeoServer\Models\Style the uploaded style details
      * @throws StyleAlreadyExistsException
      */
     public function uploadStyle(StyleFile $file)
     {
         $initialPostRoute = $this->routes->url("workspaces/$this->workspace/styles");
-        $filePutRoute = $this->routes->url("styles/$file->name");
-
-        dump(compact('initialPostRoute', 'filePutRoute'));
+        $filePutRoute = $this->routes->url("workspaces/$this->workspace/styles/$file->name");
 
         try{
 
@@ -501,6 +506,7 @@ final class GeoServer
                     'filename' => $file->originalName,
                 ]
             ]);
+            
         }catch(ErrorResponseException $ex){
             // we receive a 500 error response if the style already exists
             if($ex->getData() === "Style named '$file->name' already exists in workspace $this->workspace"){
@@ -512,12 +518,28 @@ final class GeoServer
 
         $putFileResponse = $this->putFile($filePutRoute, $file);
 
-        dd($putFileResponse);
+        return $this->style($file->name);
     }
 
-    public function removeStyle()
+    /**
+     * Remove a style from the workspace, given its name
+     * 
+     * @param string $name the name of the style to remove. It must be in the workspace
+     * @return \OneOffTech\GeoServer\Models\Style
+     * @throws StyleNotFoundException if the style with the given name cannot be found
+     * @throws ErrorResponseException for communication errors with the GeoServer
+     */
+    public function removeStyle($name)
     {
+        $style = $this->style($name);
 
+        $route = $this->routes->url("workspaces/$this->workspace/styles/$name");
+
+        $this->delete($route);
+
+        $style->exists = false;
+
+        return $style;
     }
 
     /**

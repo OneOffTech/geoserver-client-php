@@ -11,28 +11,12 @@ use OneOffTech\GeoServer\Contracts\Model;
 class Style extends Model
 {
     /**
-     * Store name
+     * The style name
      * 
      * @var string
      * @JMS\Type("string")
      */
     public $name;
-
-    /**
-     * The API URL to the style details
-     * 
-     * @var string
-     * @JMS\Type("string")
-     */
-    public $href;
-
-    /**
-     * If the style is enabled
-     * 
-     * @var bool
-     * @JMS\Type("boolean")
-     */
-    public $enabled;
 
     /**
      * The workspace in which the style is located
@@ -41,6 +25,32 @@ class Style extends Model
      * @JMS\Type("string")
      */
     public $workspace;
+
+    /**
+     * The style format
+     * 
+     * @var string
+     * @JMS\Type("string")
+     */
+    public $format;
+
+    /**
+     * The style version
+     * 
+     * @var string
+     * @JMS\Type("string")
+     * @JMS\SerializedName("languageVersion")
+     */
+    public $version;
+
+    /**
+     * The original style file name
+     * 
+     * @var string
+     * @JMS\Type("string")
+     * @JMS\SerializedName("filename")
+     */
+    public $filename;
 
     /**
      * Indicates if the style exists.
