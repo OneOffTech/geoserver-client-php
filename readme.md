@@ -354,6 +354,9 @@ vendor/bin/phpunit
 
 Hey, we're accepting Pull Requests. Please target your pull request to the `master` branch.
 
+The project follows the PSR-2 coding standard. 
+If you can run `./vendor/bin/php-cs-fixer fix` before finishing up the pull request.
+
 ## License
 
 This project is licensed under the AGPL v3 license, see [LICENSE.txt](./LICENSE.txt).
