@@ -6,13 +6,13 @@ use GuzzleHttp\Psr7\Request;
 use OneOffTech\GeoServer\GeoFile;
 use OneOffTech\GeoServer\GeoType;
 use Psr\Http\Message\RequestInterface;
-use OneOffTech\GeoServer\Exception\ErrorResponseException;
-use OneOffTech\GeoServer\Exception\InvalidDataException;
 use Tests\Concern\SetupIntegrationTest;
-use OneOffTech\GeoServer\Models\Workspace;
-use OneOffTech\GeoServer\Models\CoverageStore;
 use OneOffTech\GeoServer\Models\Feature;
 use OneOffTech\GeoServer\Models\Coverage;
+use OneOffTech\GeoServer\Models\Workspace;
+use OneOffTech\GeoServer\Models\CoverageStore;
+use OneOffTech\GeoServer\Exception\InvalidDataException;
+use OneOffTech\GeoServer\Exception\ErrorResponseException;
 use OneOffTech\GeoServer\Exception\StoreNotFoundException;
 
 class GeoServerCoverageStoresTest extends TestCase

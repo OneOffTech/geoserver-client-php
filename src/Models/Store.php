@@ -12,7 +12,7 @@ class Store extends Model
 {
     /**
      * Store name
-     * 
+     *
      * @var string
      * @JMS\Type("string")
      */
@@ -20,7 +20,7 @@ class Store extends Model
 
     /**
      * The API URL to the store details
-     * 
+     *
      * @var string
      * @JMS\Type("string")
      */
@@ -28,7 +28,7 @@ class Store extends Model
 
     /**
      * If the store is enabled
-     * 
+     *
      * @var bool
      * @JMS\Type("boolean")
      */
@@ -36,7 +36,7 @@ class Store extends Model
     
     /**
      * If the store is the default one
-     * 
+     *
      * @var bool
      * @JMS\Type("boolean")
      * @JMS\SerializedName("_default")
@@ -45,7 +45,7 @@ class Store extends Model
 
     /**
      * The workspace in which the store is located
-     * 
+     *
      * @var string
      * @JMS\Type("string")
      */

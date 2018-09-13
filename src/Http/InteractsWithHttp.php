@@ -2,16 +2,16 @@
 
 namespace OneOffTech\GeoServer\Http;
 
-use Throwable;
 use Exception;
+use Throwable;
 use Http\Client\HttpClient;
 use Http\Message\MessageFactory;
 use Psr\Http\Message\ResponseInterface;
 use OneOffTech\GeoServer\Http\ResponseHelper;
 use OneOffTech\GeoServer\Support\ImageResponse;
 use OneOffTech\GeoServer\Exception\InvalidDataException;
-use OneOffTech\GeoServer\Exception\SerializationException;
 use OneOffTech\GeoServer\Exception\ErrorResponseException;
+use OneOffTech\GeoServer\Exception\SerializationException;
 use OneOffTech\GeoServer\Exception\DeserializationException;
 
 trait InteractsWithHttp
@@ -163,7 +163,7 @@ trait InteractsWithHttp
             throw new ErrorResponseException(!empty($response->getReasonPhrase()) ? $response->getReasonPhrase() : 'There was a problem in fulfilling your request.', $response->getStatusCode(), (string)$responseBody);
         }
 
-        if(strpos($contentType, 'image') === false){
+        if (strpos($contentType, 'image') === false) {
             throw new ErrorResponseException("Expected image response, but got [$contentType]", $response->getStatusCode(), (string)$response->getBody());
         }
 

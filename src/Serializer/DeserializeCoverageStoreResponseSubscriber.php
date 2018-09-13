@@ -53,7 +53,7 @@ class DeserializeCoverageStoreResponseSubscriber implements EventSubscriberInter
             $data['workspace'] = $data['workspace']['name'];
         }
 
-        if(isset($data['coverages']) && is_string($data['coverages'])){
+        if (isset($data['coverages']) && is_string($data['coverages'])) {
             $data['coverages'] = [$data['coverages']];
         }
 

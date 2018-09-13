@@ -2,22 +2,22 @@
 
 namespace OneOffTech\GeoServer;
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
-use Http\Client\Common\Plugin\AuthenticationPlugin;
-use Http\Client\Common\Plugin\HeaderDefaultsPlugin;
-use Http\Client\Common\PluginClient;
 use Http\Client\HttpClient;
+use JMS\Serializer\Serializer;
+use Http\Message\MessageFactory;
+use Http\Client\Common\PluginClient;
+use JMS\Serializer\SerializerBuilder;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
 use OneOffTech\GeoServer\Contracts\Authentication;
-use Http\Message\MessageFactory;
-use JMS\Serializer\Serializer;
-use JMS\Serializer\SerializerBuilder;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+use Http\Client\Common\Plugin\AuthenticationPlugin;
+use Http\Client\Common\Plugin\HeaderDefaultsPlugin;
 use JMS\Serializer\EventDispatcher\EventDispatcher;
-use OneOffTech\GeoServer\Serializer\DeserializeDataStoreResponseSubscriber;
 use OneOffTech\GeoServer\Serializer\DeserializeBoundingBoxSubscriber;
-use OneOffTech\GeoServer\Serializer\DeserializeCoverageStoreResponseSubscriber;
 use OneOffTech\GeoServer\Serializer\DeserializeStyleResponseSubscriber;
+use OneOffTech\GeoServer\Serializer\DeserializeDataStoreResponseSubscriber;
+use OneOffTech\GeoServer\Serializer\DeserializeCoverageStoreResponseSubscriber;
 
 final class Options
 {

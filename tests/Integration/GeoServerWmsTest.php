@@ -4,14 +4,14 @@ namespace Tests\Integration;
 use Tests\TestCase;
 use GuzzleHttp\Psr7\Request;
 use OneOffTech\GeoServer\GeoFile;
-use OneOffTech\GeoServer\Models\DataStore;
-use OneOffTech\GeoServer\Models\Feature;
 use Psr\Http\Message\RequestInterface;
-use OneOffTech\GeoServer\Exception\ErrorResponseException;
-use OneOffTech\GeoServer\Exception\InvalidDataException;
 use Tests\Concern\SetupIntegrationTest;
+use OneOffTech\GeoServer\Models\Feature;
+use OneOffTech\GeoServer\Models\DataStore;
 use OneOffTech\GeoServer\Models\Workspace;
 use OneOffTech\GeoServer\Support\ImageResponse;
+use OneOffTech\GeoServer\Exception\InvalidDataException;
+use OneOffTech\GeoServer\Exception\ErrorResponseException;
 
 class GeoServerWmsTest extends TestCase
 {

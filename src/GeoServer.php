@@ -13,18 +13,18 @@ use OneOffTech\GeoServer\Models\Workspace;
 use OneOffTech\GeoServer\Support\ZipReader;
 use OneOffTech\GeoServer\Support\WmsOptions;
 use OneOffTech\GeoServer\Models\CoverageStore;
-use OneOffTech\GeoServer\Http\InteractsWithHttp;
 use OneOffTech\GeoServer\Support\ImageResponse;
+use OneOffTech\GeoServer\Http\InteractsWithHttp;
 use OneOffTech\GeoServer\Auth\NullAuthentication;
 use OneOffTech\GeoServer\Contracts\Authentication;
 use OneOffTech\GeoServer\Http\Responses\StylesResponse;
 use OneOffTech\GeoServer\Http\Responses\FeatureResponse;
 use OneOffTech\GeoServer\Http\Responses\CoverageResponse;
-use OneOffTech\GeoServer\Http\Responses\WorkspaceResponse;
-use OneOffTech\GeoServer\Http\Responses\DataStoreResponse;
 use OneOffTech\GeoServer\Exception\ErrorResponseException;
 use OneOffTech\GeoServer\Exception\StoreNotFoundException;
 use OneOffTech\GeoServer\Exception\StyleNotFoundException;
+use OneOffTech\GeoServer\Http\Responses\DataStoreResponse;
+use OneOffTech\GeoServer\Http\Responses\WorkspaceResponse;
 use OneOffTech\GeoServer\Http\Responses\CoverageStoreResponse;
 use OneOffTech\GeoServer\Exception\StyleAlreadyExistsException;
 use OneOffTech\GeoServer\Http\Responses\CoverageStoresResponse;
@@ -297,18 +297,18 @@ final class GeoServer
 
         // if ZIP shpefile and name was changed from original filename
         // we need to rename all files contained in it
-        if($file->format === GeoFormat::SHAPEFILE_ZIP && $file->wasRenamed()){
+        if ($file->format === GeoFormat::SHAPEFILE_ZIP && $file->wasRenamed()) {
             $contentList = ZipReader::contentList($file->path());
             $nameWithoutExtension = rtrim($file->name, $file->extension);
             
             // check the content if modifications are required
-            if(!in_array("$nameWithoutExtension.shp", $contentList)){
+            if (!in_array("$nameWithoutExtension.shp", $contentList)) {
 
-                // if yes, clone the content and do the filename edits to 
+                // if yes, clone the content and do the filename edits to
                 // make sure that files inside the zip are correctly named
                 $copy = $file->copy();
                 
-                ZipReader::tap($copy->path(), function($zip) use ($contentList, $nameWithoutExtension) {
+                ZipReader::tap($copy->path(), function ($zip) use ($contentList, $nameWithoutExtension) {
                     foreach ($contentList as $entry) {
                         $entryExtension = pathinfo($entry, PATHINFO_EXTENSION);
                         $newEntryName = "$nameWithoutExtension.$entryExtension";
@@ -316,19 +316,17 @@ final class GeoServer
                     }
                 });
 
-                try{
+                try {
                     $this->putFile($route, $copy);
-                }catch(Exception $ex){
+                } catch (Exception $ex) {
                     throw $ex;
                 } finally {
                     unlink($copy->path());
                 }
-            }
-            else {
+            } else {
                 $this->putFile($route, $file);
             }
-        }
-        else {
+        } else {
             $this->putFile($route, $file);
         }
 
@@ -348,7 +346,7 @@ final class GeoServer
     /**
      * Check if a specified GeoFile was uploaded to the Geoserver
      * The check will attempt to find the store that matches the given name
-     * 
+     *
      * @param GeoFile $file
      * @return bool
      */
@@ -356,7 +354,7 @@ final class GeoServer
     {
         $store = $file->type === GeoType::VECTOR ? 'feature' : 'coverage';
         
-        try{
+        try {
             $found = $this->{$store}($file->name);
     
             if (!is_null($found)) {
@@ -364,18 +362,16 @@ final class GeoServer
             }
     
             return false;
-            
-        }catch(Exception $ex){
-            
+        } catch (Exception $ex) {
             return false;
         }
     }
 
     /**
      * Delete a GeoFile from the GeoServer instance
-     * 
+     *
      * Deletes the corresponding store based on the GeoType format
-     * 
+     *
      * @param GeoFile $data The GeoFile to delete
      * @return bool
      * @throws \OneOffTech\GeoServer\Exception\StoreNotFoundException if the store, that corresponds to the file, do not exists
@@ -396,13 +392,13 @@ final class GeoServer
 
     /**
      * Get the Web Map Service (WMS) map URL for the specified resource
-     * 
+     *
      * @param GeoFile|Resource data the data you want to obtain the WMS url for. If a GeoFile is passed, the corresponding resource is retrieved from the geoserver, if found
      * @param WmsOption $wmsOptions The options to configure the WMS output
      */
     public function wmsMapUrl($data, ?WmsOptions $wmsOptions = null)
     {
-        if(!($data instanceof GeoFile || $data instanceof Resource)){
+        if (!($data instanceof GeoFile || $data instanceof Resource)) {
             throw new InvalidArgumentException("Data must be a GeoFile or Resource instance.");
         }
 
@@ -418,15 +414,15 @@ final class GeoServer
 
 
     /**
-     * Attempt to retrieve a thumbnail of a previously uploaded 
+     * Attempt to retrieve a thumbnail of a previously uploaded
      * GeoFile or Resource using the Web Map Service
-     * 
+     *
      * @param GeoFile|Resource data the data you want to obtain the WMS url for. If a GeoFile is passed, the corresponding resource is retrieved from the geoserver, if found
      * @return resource A resource
      */
     public function thumbnail($data, $width = 300, $height = 300)
     {
-        if(!($data instanceof GeoFile || $data instanceof Resource)){
+        if (!($data instanceof GeoFile || $data instanceof Resource)) {
             throw new InvalidArgumentException("Data must be a GeoFile or Resource instance.");
         }
 
@@ -444,9 +440,9 @@ final class GeoServer
 
 
     /**
-     * Get a style by its name. 
+     * Get a style by its name.
      * The style must be in the current workspace
-     * 
+     *
      * @param string $name
      * @return \OneOffTech\GeoServer\Models\Style
      * @throws StyleNotFoundException if the style with the given name cannot be found
@@ -470,8 +466,8 @@ final class GeoServer
     
     /**
      * Get all the styles defined in the current workspace
-     * 
-     * @return \OneOffTech\GeoServer\Models\Style[] 
+     *
+     * @return \OneOffTech\GeoServer\Models\Style[]
      */
     public function styles()
     {
@@ -479,7 +475,7 @@ final class GeoServer
 
         $response = $this->get($route, StylesResponse::class);
 
-        $eagerLoaded = array_map(function($style){
+        $eagerLoaded = array_map(function ($style) {
             return $this->style($style->name);
         }, $response->styles);
 
@@ -488,7 +484,7 @@ final class GeoServer
 
     /**
      * Upload a SLD style to the workspace
-     * 
+     *
      * @param StyleFile $file The style file
      * @return \OneOffTech\GeoServer\Models\Style the uploaded style details
      * @throws StyleAlreadyExistsException
@@ -498,18 +494,16 @@ final class GeoServer
         $initialPostRoute = $this->routes->url("workspaces/$this->workspace/styles");
         $filePutRoute = $this->routes->url("workspaces/$this->workspace/styles/$file->name");
 
-        try{
-
+        try {
             $postResponse = $this->post($initialPostRoute, [
                 'style' => [
                     'name' => $file->name,
                     'filename' => $file->originalName,
                 ]
             ]);
-            
-        }catch(ErrorResponseException $ex){
+        } catch (ErrorResponseException $ex) {
             // we receive a 500 error response if the style already exists
-            if($ex->getData() === "Style named '$file->name' already exists in workspace $this->workspace"){
+            if ($ex->getData() === "Style named '$file->name' already exists in workspace $this->workspace") {
                 throw StyleAlreadyExistsException::style($file->name, $this->workspace);
             }
 
@@ -523,7 +517,7 @@ final class GeoServer
 
     /**
      * Remove a style from the workspace, given its name
-     * 
+     *
      * @param string $name the name of the style to remove. It must be in the workspace
      * @return \OneOffTech\GeoServer\Models\Style
      * @throws StyleNotFoundException if the style with the given name cannot be found

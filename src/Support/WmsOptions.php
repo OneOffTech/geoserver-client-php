@@ -9,7 +9,7 @@ use OneOffTech\GeoServer\Models\BoundingBox;
 
 /**
  * Options for the Web Map Service (WMS)
- * 
+ *
  * Helper class to create the parameters for the WMS service call
  */
 final class WmsOptions
@@ -25,7 +25,7 @@ final class WmsOptions
     const OUTPUT_PNG8 = "image/png8";
 
     /**
-     * 
+     *
      */
     const OUTPUT_JPEG = "image/jpeg";
 
@@ -35,12 +35,12 @@ final class WmsOptions
     const OUTPUT_JPEG_PNG = "image/vnd.jpeg-png";
 
     /**
-     * 
+     *
      */
     const OUTPUT_GIF = "image/gif";
 
     /**
-     * 
+     *
      */
     const OUTPUT_TIFF = "image/tiff";
 
@@ -60,27 +60,27 @@ final class WmsOptions
     const OUTPUT_GEOTIFF8 = "image/geotiff8";
 
     /**
-     * 
+     *
      */
     const OUTPUT_SVG = "image/svg";
 
     /**
-     * 
+     *
      */
     const OUTPUT_PDF = "application/pdf";
 
     /**
-     * 
+     *
      */
     const OUTPUT_GEORSS = "rss";
 
     /**
-     * 
+     *
      */
     const OUTPUT_KML = "kml";
 
     /**
-     * 
+     *
      */
     const OUTPUT_KMZ = "kmz";
 
@@ -129,7 +129,7 @@ final class WmsOptions
 
     public function format($format)
     {
-        if(!$this->isFormatValid($format)){
+        if (!$this->isFormatValid($format)) {
             throw new InvalidArgumentException("Unrecognized format [$format] Expected one of [".join(",", $this->supportedFormats()) . "]");
         }
         
@@ -171,11 +171,11 @@ final class WmsOptions
 
     public function toArray()
     {
-        if(empty($this->layers)){
+        if (empty($this->layers)) {
             throw new LogicException("Layers cannot be null or empty");
         }
         
-        if(is_null($this->bbox)){
+        if (is_null($this->bbox)) {
             throw new LogicException("Bounding box cannot be null");
         }
 
@@ -194,7 +194,6 @@ final class WmsOptions
 
     public function toUrlParameters()
     {
-
         $params = [
             'version' => $this->version,
             'request' => $this->request,
@@ -207,7 +206,7 @@ final class WmsOptions
             'format' => urlencode($this->format),
         ];
 
-        $collapsedParams = array_map(function($key, $value){
+        $collapsedParams = array_map(function ($key, $value) {
             return "$key=$value";
         }, array_keys($params), $params);
 

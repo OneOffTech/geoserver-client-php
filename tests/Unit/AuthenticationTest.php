@@ -3,8 +3,8 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use GuzzleHttp\Psr7\Request;
-use OneOffTech\GeoServer\Auth\Authentication;
 use Psr\Http\Message\RequestInterface;
+use OneOffTech\GeoServer\Auth\Authentication;
 use OneOffTech\GeoServer\Auth\NullAuthentication;
 
 class AuthenticationTest extends TestCase

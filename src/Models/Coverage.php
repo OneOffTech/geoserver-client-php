@@ -13,7 +13,7 @@ final class Coverage extends Resource
 {
   
     /**
-     * 
+     *
      * @var string
      * @JMS\Type("string")
      * @JMS\SerializedName("nativeFormat")

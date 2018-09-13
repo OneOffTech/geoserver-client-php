@@ -4,6 +4,8 @@ namespace OneOffTech\GeoServer\Http;
 use OneOffTech\GeoServer\Support\WmsOptions;
 
 /**
+ * Helper class for managing URL creation
+ *
  * @internal
  */
 final class Routes
@@ -21,6 +23,8 @@ final class Routes
 
     /**
      * Helper for creating GeoServer Rest URLs
+     *
+     * @param string $endpoint the endpoint to attach to the base URL
      * @return string
      */
     public function url($endpoint)
@@ -29,25 +33,21 @@ final class Routes
     }
     
     /**
-     * Helper for creating Web Map Service (WMS) map urls for a layer
-     * 
+     * Web Map Service (WMS) service url helper
+     *
+     * Create the URL to the WMS service based on the specified options
+     *
+     * @param string $workspace The workspace the URL will refer to
+     * @param \OneOffTech\GeoServer\Support\WmsOptions $options The WMS service options
      * @return string
      */
     public function wms($workspace, WmsOptions $options)
     {
-        $srs = $srs ?? 'EPSG:4326';
-
-        return sprintf("%s/%s/wms?service=WMS&%s", 
-            $this->baseUrl, $workspace, $options->toUrlParameters());
-
-        // https://geoserver.test.oneofftech.xyz/geoserver/kbox/wms?service=WMS&version=1.1.0
-        //     &request=GetMap
-        //     &layers=kbox:Resource_Sites
-        //     &styles=
-        //     &bbox=-122.83676432991959,45.43253929856904,-122.47260028630856,45.65098261975053
-        //     &width=768
-        //     &height=460
-        //     &srs=EPSG:4326
-        //     &format=image%2Fpng
+        return sprintf(
+            "%s/%s/wms?service=WMS&%s",
+            $this->baseUrl,
+            $workspace,
+            $options->toUrlParameters()
+        );
     }
 }

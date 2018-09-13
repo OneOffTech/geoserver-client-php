@@ -12,7 +12,7 @@ abstract class Resource extends Model
 {
     /**
      * The name of the resource.
-     * 
+     *
      * @var string
      * @JMS\Type("string")
      */
@@ -20,10 +20,10 @@ abstract class Resource extends Model
     
     /**
      * The native name of the resource.
-     * 
-     * This name corresponds to the physical resource that is 
+     *
+     * This name corresponds to the physical resource that is
      * derived from -- a shapefile name, a database table,...
-     * 
+     *
      * @var string
      * @JMS\Type("string")
      * @JMS\SerializedName("nativeName")
@@ -31,9 +31,9 @@ abstract class Resource extends Model
     public $nativeName;
   
     /**
-     * The title of the resource. 
+     * The title of the resource.
      * This is usually something that is meant to be displayed in a user interface.
-     * 
+     *
      * @var string
      * @JMS\Type("string")
      */
@@ -104,7 +104,7 @@ abstract class Resource extends Model
 
     /**
      * Wrapper for the derived set of attributes for the feature type
-     * 
+     *
      * @var array
      * @JMS\Type("array")
      */
@@ -142,8 +142,8 @@ abstract class Resource extends Model
 
     /**
      * Return the type of the resource
-     * 
+     *
      * @return string The @see GeoType of the resource
      */
-    public abstract function type();
+    abstract public function type();
 }

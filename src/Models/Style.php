@@ -12,7 +12,7 @@ class Style extends Model
 {
     /**
      * The style name
-     * 
+     *
      * @var string
      * @JMS\Type("string")
      */
@@ -20,7 +20,7 @@ class Style extends Model
 
     /**
      * The workspace in which the style is located
-     * 
+     *
      * @var string
      * @JMS\Type("string")
      */
@@ -28,7 +28,7 @@ class Style extends Model
 
     /**
      * The style format
-     * 
+     *
      * @var string
      * @JMS\Type("string")
      */
@@ -36,7 +36,7 @@ class Style extends Model
 
     /**
      * The style version
-     * 
+     *
      * @var string
      * @JMS\Type("string")
      * @JMS\SerializedName("languageVersion")
@@ -45,7 +45,7 @@ class Style extends Model
 
     /**
      * The original style file name
-     * 
+     *
      * @var string
      * @JMS\Type("string")
      * @JMS\SerializedName("filename")

@@ -11,7 +11,6 @@ use OneOffTech\GeoServer\Exception\UnsupportedFileException;
  */
 class StyleFile
 {
-
     const MIME_TYPE = "application/vnd.ogc.sld+xml";
 
     protected $file;
@@ -26,8 +25,8 @@ class StyleFile
 
     /**
      * The mime type as required by GeoServer
-     * 
-     * e.g. for a geo tiff file the mime type appears to be "geotif/geotiff", 
+     *
+     * e.g. for a geo tiff file the mime type appears to be "geotif/geotiff",
      * as found in https://gis.stackexchange.com/questions/218162/creating-coveragestore-geotiff-using-rest-api
      */
     protected $normalizedMimeType;

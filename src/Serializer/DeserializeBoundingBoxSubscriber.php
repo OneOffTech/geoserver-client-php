@@ -32,7 +32,7 @@ class DeserializeBoundingBoxSubscriber implements EventSubscriberInterface
 
         // Convert a projected CSR response to string
 
-        if(isset($data['crs']) && !is_string($data['crs'])){
+        if (isset($data['crs']) && !is_string($data['crs'])) {
             $crs = $data['crs'];
             
             if (isset($crs['@class']) && $crs['@class'] === 'projected') {
