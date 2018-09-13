@@ -11,6 +11,7 @@ As of now it offers the following features:
 * [x] [Create datastores](#data-stores) and listing them
 * [x] [Create coveragestores](#coverage-stores) and listing them
 * [x] [Upload files](#uploading-geographic-files) in various [formats](#supported-file-formats)
+* [x] [Manage styles](#styles) in SLD format
 
 > **This package is under active developed and is not ready for production**
 
@@ -226,6 +227,69 @@ $removed = $geoserver->remove($file);
 
 > The identification currently uses the name assigned to the GeoFile
 
+#### Styles
+
+The client can upload, retrieve and delete styles defined within the configured workspace
+
+##### Upload style file
+
+To upload a style, a `StyleFile` instance representing the file on disk is required.
+Once the instance is obtained use the `uploadStyle` method on a GeoServer client instance.
+
+The style will be uploaded as part of the workspace styles.
+
+```php
+use OneOffTech\GeoServer\StyleFile;
+
+$file = StyleFile::from('/path/to/style.sld');
+// => OneOffTech\GeoServer\StyleFile{
+//     + name
+//     + originalName
+//     + mimeType
+//     + extension
+//    }
+// it will throw OneOffTech\GeoServer\Exception\UnsupportedFileException in case the file cannot be recognized
+
+// You can change the style name before uploading it to avoid collision. By default the filename will be used.
+$file->name('my_custom_style');
+
+$style = $geoserver->uploadStyle($file);
+// => OneOffTech\GeoServer\Models\Style
+```
+
+##### Retrieve a style
+
+The client let you retrieve a style by its name
+
+```php
+$style = $geoserver->style('style_name');
+// => OneOffTech\GeoServer\Models\Style
+```
+
+> The name must be equal to the one given for the upload.
+> It might not be the file name
+
+##### Retrieve all styles
+
+You can also retrieve all styles defined in the workspace
+
+```php
+$styles = $geoserver->styles();
+// => array of OneOffTech\GeoServer\Models\Style
+```
+
+##### Remove a style
+
+Style removal is performed by giving the style name to the `removeStyle` method. 
+The method will return the details of the deleted style.
+
+```php
+$style = $geoserver->removeStyle('style_name');
+// => OneOffTech\GeoServer\Models\Style
+```
+
+> the `$style->exists` attribute will be set to `false` after deletion
+
 ## Supported file formats
 
 The library is able to recognize:
@@ -233,13 +297,20 @@ The library is able to recognize:
 - `Shapefile`
 - `Shapefile` inside `zip` archive
 - `GeoTIFF`
+- Styled Layer Descriptor `SLD` files for layer styles in XML format
 
 You can check if a file is supported using
 
 ```php
 use OneOffTech\GeoServer\GeoFile;
+use OneOffTech\GeoServer\StyleFile;
 
 $isSupported = GeoFile::isSupported($path);
+// => true/false
+
+
+// For style files, the support is available with the StyleFile class
+$isSupported = StyleFile::isSupported($path);
 // => true/false
 ```
 
