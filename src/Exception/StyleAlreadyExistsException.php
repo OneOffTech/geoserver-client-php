@@ -17,7 +17,7 @@ class StyleAlreadyExistsException extends GeoServerClientException
 
     /**
      * Create a style already exists exception for a given style
-     * 
+     *
      * @param string $name the style name
      * @param string $workspace the workspace that contains the style
      * @return StyleAlreadyExistsException

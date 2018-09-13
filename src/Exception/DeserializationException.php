@@ -3,7 +3,7 @@ namespace OneOffTech\GeoServer\Exception;
 
 /**
  * Deserialization exception
- * 
+ *
  * Thrown when the JSON response from the server could not be deserialized into an object
  */
 class DeserializationException extends GeoServerClientException

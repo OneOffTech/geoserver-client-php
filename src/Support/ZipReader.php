@@ -55,9 +55,9 @@ final class ZipReader extends FileReader
 
     /**
      * Tap into the Zip Archive
-     * 
+     *
      * After the callback is executed the ZIP archive is closed and saved
-     * 
+     *
      * @param string The zip file path
      * @param callable The function to execute when the zip file is opened. This function receive a ZipArchive instance as argument
      * @return string The zip file path
@@ -67,9 +67,9 @@ final class ZipReader extends FileReader
         $za = new ZipArchive;
         $za->open($path);
 
-        try{
+        try {
             $callback($za);
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             throw $ex;
         } finally {
             $za->close();
@@ -77,5 +77,4 @@ final class ZipReader extends FileReader
 
         return $path;
     }
-
 }

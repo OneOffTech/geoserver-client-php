@@ -8,6 +8,7 @@ $finder = PhpCsFixer\Finder::create()
 return PhpCsFixer\Config::create()
     ->setRules([
         '@PSR2' => true,
+        'ordered_imports' => ['sort_algorithm' => 'length'],
     ])
     ->setFinder($finder)
 ;

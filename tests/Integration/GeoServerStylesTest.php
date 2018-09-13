@@ -85,5 +85,4 @@ class GeoServerStylesTest extends TestCase
 
         $style = $this->geoserver->style('some_name');
     }
-
 }

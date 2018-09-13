@@ -17,7 +17,7 @@ class StyleNotFoundException extends GeoServerClientException
 
     /**
      * Create a style not found exception for a given style
-     * 
+     *
      * @param string $name the style name
      * @param string $workspace the workspace that was expecting to contain the style
      * @return StyleNotFoundException

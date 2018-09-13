@@ -3,7 +3,7 @@ namespace OneOffTech\GeoServer\Exception;
 
 /**
  * Serialization exception
- * 
+ *
  * Thrown when an object cannot be serialized into JSON
  */
 class SerializationException extends GeoServerClientException

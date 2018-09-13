@@ -4,7 +4,7 @@ namespace OneOffTech\GeoServer\Exception;
 
 /**
  * Error response Exception
- * 
+ *
  * Thrown when the server respond with a failure
  */
 class ErrorResponseException extends GeoServerClientException

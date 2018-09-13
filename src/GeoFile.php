@@ -29,15 +29,15 @@ class GeoFile
     
     /**
      * The extension as required by GeoServer
-     * 
+     *
      * e.g. for a geo tiff file the extension must be .geotiff
      */
     protected $normalizedExtension;
 
     /**
      * The mime type as required by GeoServer
-     * 
-     * e.g. for a geo tiff file the mime type appears to be "geotif/geotiff", 
+     *
+     * e.g. for a geo tiff file the mime type appears to be "geotif/geotiff",
      * as found in https://gis.stackexchange.com/questions/218162/creating-coveragestore-geotiff-using-rest-api
      */
     protected $normalizedMimeType;
@@ -89,7 +89,7 @@ class GeoFile
 
     /**
      * Tell if the name attribute is different from the original filename
-     * 
+     *
      * @return bool
      */
     public function wasRenamed()
@@ -99,7 +99,7 @@ class GeoFile
 
     /**
      * Get the path to the file
-     * 
+     *
      * @return string
      */
     public function path()
@@ -121,10 +121,10 @@ class GeoFile
 
     /**
      * Copy the GeoFile content into a temporary folder and return the new GeoFile instance
-     * 
+     *
      * Please note that the temporary file is not disposed automatically
-     * 
-     * @param string $temporaryFolder 
+     *
+     * @param string $temporaryFolder
      * @return GeoFile
      */
     public function copy($temporaryFolder = null)

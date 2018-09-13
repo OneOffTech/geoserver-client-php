@@ -18,7 +18,7 @@ class StoreNotFoundException extends GeoServerClientException
 
     /**
      * Create a store not found exception for a data store
-     * 
+     *
      * @param string $name the data store name
      * @return StoreNotFoundException
      */
@@ -29,7 +29,7 @@ class StoreNotFoundException extends GeoServerClientException
     
     /**
      * Create a store not found exception for a coverage store
-     * 
+     *
      * @param string $name the coverage store name
      * @return StoreNotFoundException
      */

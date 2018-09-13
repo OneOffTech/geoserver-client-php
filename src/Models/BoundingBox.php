@@ -40,7 +40,7 @@ class BoundingBox
 
     /**
      * The coordinate system in which the bounding box values are expressed
-     * 
+     *
      * @var string
      * @JMS\Type("string")
      */

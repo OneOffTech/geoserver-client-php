@@ -32,7 +32,6 @@ class WmsOptionsTest extends TestCase
             'height' => 480,
             'styles' => [],
         ], $options->toArray());
-        
     }
     
     public function test_not_setting_layer_generate_exception_when_serializing()
