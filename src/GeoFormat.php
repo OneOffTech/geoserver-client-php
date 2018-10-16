@@ -11,4 +11,5 @@ final class GeoFormat
     const SHAPEFILE_ZIP = "shapefile_zip";
     const GEOTIFF = "geotiff";
     const SLD = "SLD";
+    const GEOPACKAGE = "geopackage";
 }

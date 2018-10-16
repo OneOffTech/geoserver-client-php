@@ -114,6 +114,25 @@ final class BinaryReader extends FileReader
         return $hasGeoKeyDirectory;
     }
 
+    public static function isGeoPackage($path)
+    {
+        $handle = self::openFileBinary($path);
+        $sqliteMagic = self::getString(fread($handle, 16), 15);
+        fseek($handle, 68);
+        $gpkgMagic = self::getString(fread($handle, 4), 4);
+        self::closeFile($handle);
+
+        if($sqliteMagic !== 'SQLite format 3'){
+            return false;
+        }
+
+        if($gpkgMagic !== 'GPKG'){
+            return false;
+        }
+
+        return true;
+    }
+
     private static function getBytes($data, $length, $offset = 0, $big_endian = true)
     {
         if ($length <= 2) {
@@ -123,5 +142,20 @@ final class BinaryReader extends FileReader
         }
         // unsigned short 16bit current(unpack($big_endian ? 'n' : 'v', $tiffHeader, 4));
         // unsigned long 32bit current(unpack($big_endian ? 'N' : 'V', $tiffHeader, 4));
+    }
+
+    private static function getString($data, $length, $offset = 0)
+    {
+        try{
+            $chars = [];
+
+            for ($i=$offset; $i < $length; $i++) { 
+                $chars[] = current(unpack('a', $data, $i));
+            }
+
+            return implode('', $chars);
+        }catch(Exception $ex){
+            return '';
+        }
     }
 }

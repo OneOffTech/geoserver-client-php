@@ -14,6 +14,7 @@ class GeoFileTest extends TestCase
             [__DIR__ . '/../fixtures/shapefile.shp'],
             [__DIR__ . '/../fixtures/shapefile.zip'],
             [__DIR__ . '/../fixtures/geotiff.tiff'],
+            [__DIR__ . '/../fixtures/empty.gpkg'],
         ];
     }
     
@@ -84,6 +85,19 @@ class GeoFileTest extends TestCase
         $this->assertEquals('image/tiff', $file->mimeType);
         $this->assertEquals('tiff', $file->extension);
         $this->assertEquals('geotiff.tiff', $file->name);
+        $this->assertEquals($file->originalName, $file->name);
+    }
+
+    public function test_geopackage_is_recognized()
+    {
+        $file = GeoFile::from(__DIR__ . '/../fixtures/empty.gpkg');
+
+        $this->assertInstanceOf(GeoFile::class, $file);
+        $this->assertEquals(GeoFormat::GEOPACKAGE, $file->format);
+        $this->assertEquals(GeoType::VECTOR, $file->type);
+        $this->assertEquals('application/geopackage+sqlite3', $file->mimeType);
+        $this->assertEquals('gpkg', $file->extension);
+        $this->assertEquals('empty.gpkg', $file->name);
         $this->assertEquals($file->originalName, $file->name);
     }
 

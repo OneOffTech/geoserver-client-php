@@ -12,7 +12,8 @@ final class TypeResolver
         GeoFormat::SHAPEFILE => 'application/octet-stream', // shapefile
         GeoFormat::SHAPEFILE_ZIP => 'application/zip', // shapefile in ZIP container
         GeoFormat::GEOTIFF => 'image/tiff', // geotiff
-        GeoFormat::SLD => 'application/vnd.ogc.sld+xml', // geotiff
+        GeoFormat::SLD => 'application/vnd.ogc.sld+xml',
+        GeoFormat::GEOPACKAGE => 'application/geopackage+sqlite3',
     ];
     
     protected static $mimeTypeToFormat = [];
@@ -21,10 +22,12 @@ final class TypeResolver
         GeoFormat::SHAPEFILE => GeoType::VECTOR,
         GeoFormat::SHAPEFILE_ZIP => GeoType::VECTOR,
         GeoFormat::GEOTIFF => GeoType::RASTER,
+        GeoFormat::GEOPACKAGE => GeoType::VECTOR,
 
         GeoType::VECTOR => [
             GeoFormat::SHAPEFILE,
             GeoFormat::SHAPEFILE_ZIP,
+            GeoFormat::GEOPACKAGE,
         ],
         GeoType::RASTER => [
             GeoFormat::GEOTIFF,
@@ -38,6 +41,7 @@ final class TypeResolver
         GeoFormat::SHAPEFILE => 'shp',
         GeoFormat::SHAPEFILE_ZIP => 'shp',
         GeoFormat::GEOTIFF => 'geotiff',
+        GeoFormat::GEOPACKAGE => 'gpkg',
     ];
 
     /**
@@ -89,6 +93,9 @@ final class TypeResolver
                 $format = GeoFormat::SLD;
                 $mimeType = self::$mimeTypes[GeoFormat::SLD];
             }
+        } elseif (BinaryReader::isGeoPackage($path)) {
+            $format = GeoFormat::GEOPACKAGE;
+            $mimeType = self::$mimeTypes[GeoFormat::GEOPACKAGE];
         }
         
         $type = self::convertFormatToType($format);
