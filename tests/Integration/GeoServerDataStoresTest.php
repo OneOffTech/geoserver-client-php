@@ -190,4 +190,41 @@ class GeoServerDataStoresTest extends TestCase
 
         $this->assertFalse($this->geoserver->exist($data), "Data still exists after remove");
     }
+
+    
+    public function test_geopackage_can_be_uploaded_and_deleted()
+    {
+        $datastoreName = 'rivers';
+        $data = GeoFile::from(__DIR__ . '/../fixtures/rivers.gpkg')->name($datastoreName);
+
+        $feature = $this->geoserver->upload($data);
+
+        $this->assertInstanceOf(Feature::class, $feature);
+        $this->assertEquals(GeoType::VECTOR, $feature->type());
+        $this->assertEquals($datastoreName, $feature->name);
+        $this->assertEquals($datastoreName, $feature->title);
+        $this->assertEquals($datastoreName, $feature->nativeName);
+        $this->assertEquals("EPSG:3857", $feature->srs);
+        $this->assertTrue($feature->enabled);
+        $this->assertFalse($feature->overridingServiceSRS);
+        $this->assertFalse($feature->skipNumberMatched);
+        $this->assertFalse($feature->circularArcPresent);
+        $this->assertNotNull($feature->store);
+        $this->assertNotNull($feature->keywords);
+        $this->assertNotNull($feature->nativeBoundingBox);
+        $this->assertNotNull($feature->boundingBox);
+        $this->assertEquals("EPSG:4326", $feature->boundingBox->crs);
+        $this->assertEquals(-165.18163033675, $feature->boundingBox->minX);
+        $this->assertEquals(-50.786361166949, $feature->boundingBox->minY);
+        $this->assertEquals(176.5891535779, $feature->boundingBox->maxX);
+        $this->assertEquals(73.578794485117, $feature->boundingBox->maxY);
+
+        $this->assertTrue($this->geoserver->exist($data), "Data not existing after upload");
+        
+        $deleteResult = $this->geoserver->remove($data);
+
+        $this->assertTrue($deleteResult, "GeoFile not deleted");
+
+        $this->assertFalse($this->geoserver->exist($data), "Data still exists after remove");
+    }
 }

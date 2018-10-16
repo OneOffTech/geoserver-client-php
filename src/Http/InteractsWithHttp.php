@@ -42,9 +42,7 @@ trait InteractsWithHttp
         $responseBody = $response->getBody();
         $contentTypeHeader = $response->getHeader('Content-Type');
         $contentType = !empty($contentTypeHeader) ? $contentTypeHeader[0] : '';
-        
         if ($response->getStatusCode() !== 200 && $response->getStatusCode() !== 201 && $response->getStatusCode() !== 204) {
-            // dump($response);
             if ($response->getStatusCode() === 500 && strpos($contentType, 'text/html')!== false) {
                 $reason = substr((string)$responseBody, 0, 500);
 
