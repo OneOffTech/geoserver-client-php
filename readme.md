@@ -297,6 +297,7 @@ The library is able to recognize:
 - `Shapefile`
 - `Shapefile` inside `zip` archive
 - `GeoTIFF`
+- `GeoPackage` format version 1.2 (can contain both vector and raster data, but will be reported as vector)
 - Styled Layer Descriptor `SLD` files for layer styles in XML format
 
 You can check if a file is supported using
@@ -349,6 +350,10 @@ docker-compose -f ./tests/docker-compose.yml up -d
 # here better to wait for the full startup of the geoserver
 vendor/bin/phpunit
 ```
+
+**Notes on testing files**
+
+- The GeoPackage testing file was copied from [github.com/ngageoint/geopackage-js](https://github.com/ngageoint/geopackage-js/blob/master/test/fixtures/rivers.gpkg)
 
 ## Contributing
 
