@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/OneOffTech/geoserver-client-php.svg?branch=master)](https://travis-ci.org/OneOffTech/geoserver-client-php)
+![Packagist](https://img.shields.io/packagist/v/oneofftech/geoserver-client-php.svg)
 
 # GeoServer PHP Client
 
