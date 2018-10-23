@@ -145,13 +145,37 @@ class GeoServerDataStoresTest extends TestCase
         $this->assertEquals(69.3082, $feature->boundingBox->maxX);
         $this->assertEquals(34.57558, $feature->boundingBox->maxY);
 
-        // $this->assertTrue($this->geoserver->exist($data), "Data not existing after upload");
+        $this->assertTrue($this->geoserver->exist($data), "Data not existing after upload");
         
-        // $deleteResult = $this->geoserver->remove($data);
+        $deleteResult = $this->geoserver->remove($data);
 
-        // $this->assertTrue($deleteResult, "GeoFile not deleted");
+        $this->assertTrue($deleteResult, "GeoFile not deleted");
 
-        // $this->assertFalse($this->geoserver->exist($data), "Data still exists after remove");
+        $this->assertFalse($this->geoserver->exist($data), "Data still exists after remove");
+    }
+
+    public function test_utf8_shapefile_in_zip_archive_can_be_uploaded_and_deleted()
+    {
+        $datastoreName = 'shapefile-utf8-inside';
+        $data = GeoFile::from(__DIR__ . '/../fixtures/some_shapefile_with_cyrillicйфячыцус.zip')->name($datastoreName);
+
+        $feature = $this->geoserver->upload($data);
+
+        $this->assertInstanceOf(Feature::class, $feature);
+        $this->assertEquals(GeoType::VECTOR, $feature->type());
+        $this->assertEquals($datastoreName, $feature->name);
+        $this->assertEquals($datastoreName, $feature->title);
+        $this->assertEquals($datastoreName, $feature->nativeName);
+        $this->assertEquals("EPSG:3857", $feature->srs);
+        $this->assertTrue($feature->enabled);
+
+        $this->assertTrue($this->geoserver->exist($data), "Data not existing after upload");
+        
+        $deleteResult = $this->geoserver->remove($data);
+
+        $this->assertTrue($deleteResult, "GeoFile not deleted");
+
+        $this->assertFalse($this->geoserver->exist($data), "Data still exists after remove");
     }
 
     public function test_shapefile_in_zip_archive_can_be_renamed_during_upload_and_deleted()
