@@ -15,6 +15,11 @@ This project adhere to Semantic Versioning.
 ### Fixed
 ### Security
 
+## [0.2.0] - 2018-10-23
+
+### Changed
+
+- File uploads to GeoServer now imposes a UTF-8 charset
 
 ## [0.1.0] - 2018-10-16
 
