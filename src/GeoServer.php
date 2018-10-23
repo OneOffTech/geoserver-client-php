@@ -293,7 +293,7 @@ final class GeoServer
     public function upload(GeoFile $file)
     {
         $store = GeoType::storeFor($file->type);
-        $route = $this->routes->url("workspaces/$this->workspace/$store/$file->name/file.{$file->normalizedExtension}");
+        $route = $this->routes->url("workspaces/$this->workspace/$store/$file->name/file.{$file->normalizedExtension}?charset=UTF-8");
 
         // if ZIP shpefile and name was changed from original filename
         // we need to rename all files contained in it
