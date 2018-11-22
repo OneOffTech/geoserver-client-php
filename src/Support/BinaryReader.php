@@ -14,8 +14,8 @@
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *    GNU General Public License for more details.
  *
- *    You should have received a copy of the GNU Affero General Public 
- *    License along with this program.  If not, see 
+ *    You should have received a copy of the GNU Affero General Public
+ *    License along with this program.  If not, see
  *    <http://www.gnu.org/licenses/>.
  */
 
@@ -141,11 +141,11 @@ final class BinaryReader extends FileReader
         $gpkgMagic = self::getString(fread($handle, 4), 4);
         self::closeFile($handle);
 
-        if($sqliteMagic !== 'SQLite format 3'){
+        if ($sqliteMagic !== 'SQLite format 3') {
             return false;
         }
 
-        if($gpkgMagic !== 'GPKG'){
+        if ($gpkgMagic !== 'GPKG') {
             return false;
         }
 
@@ -165,15 +165,15 @@ final class BinaryReader extends FileReader
 
     private static function getString($data, $length, $offset = 0)
     {
-        try{
+        try {
             $chars = [];
 
-            for ($i=$offset; $i < $length; $i++) { 
+            for ($i=$offset; $i < $length; $i++) {
                 $chars[] = current(unpack('a', $data, $i));
             }
 
             return implode('', $chars);
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             return '';
         }
     }
