@@ -5,7 +5,7 @@
 
 This PHP library provides programmatic functions to access a [GeoServer](http://geoserver.org/).
 
-It is Free and Open Source Software. Any contribution is welcome. Learn more about [how to contribute](./docs/contribution.md).
+It is Free and Open Source Software. All contributions are most welcome. Learn more about [how to contribute](./CONTRIBUTING.md).
 
 #### Features
 
@@ -25,13 +25,13 @@ For detailed information of each of the provided functions check out the [docume
 
 ## Installation
 
-The GeoServer client uses [Composer](http://getcomposer.org/) to manage its dependencies.
+The GeoServer PHP Client uses [Composer](http://getcomposer.org/) to manage its dependencies.
 
 ```bash
 composer require php-http/guzzle6-adapter guzzlehttp/psr7 oneofftech/geoserver-client-php
 ```
 
-For more information, please review the [documentation on the installatio process](./docs/installation.md).
+For more information, please review the [documentation on the installation process](./docs/installation.md).
 
 ## Supported file formats
 
