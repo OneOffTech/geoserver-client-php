@@ -9,12 +9,12 @@ It is Free and Open Source Software. All contributions are most welcome. Learn m
 
 #### Features
 
-* Obtain the [version](#get-the-geoserver-version) of the connected GeoServer instance
-* [Create workspace](#create-the-workspace) or retrieve existing workspace details
-* [Create datastores](#data-stores) and listing them
-* [Create coveragestores](#coverage-stores) and listing them
-* [Upload files](#uploading-geographic-files) in various [formats](#supported-file-formats)
-* [Manage styles](#styles) in SLD format
+* Obtain the [version](./docs/usage.md#get-the-geoserver-version) of the connected GeoServer instance
+* [Create workspace](./docs/usage.md#create-the-workspace) or retrieve existing workspace details
+* [Create datastores](./docs/usage.md#data-stores) and listing them
+* [Create coveragestores](./docs/usage.md#coverage-stores) and listing them
+* [Upload files](./docs/usage.md#uploading-geographic-files) in various [formats](#supported-file-formats)
+* [Manage styles](./docs/usage.md#styles) in SLD format
 
 For detailed information of each of the provided functions check out the [documentation on the usage](./docs/usage.md).
 

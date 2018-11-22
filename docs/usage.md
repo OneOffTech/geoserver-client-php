@@ -13,6 +13,11 @@ use OneOffTech\GeoServer\GeoServer;
 use OneOffTech\GeoServer\Auth\Authentication;
 
 /**
+ * Geoserver URL
+ */
+$url = 'http://localhost:8600/geoserver/';
+
+/**
  * Define a workspace to use
  */
 $workspace = 'your-workspace';
@@ -108,12 +113,12 @@ $result = $geoserver->deleteCoveragestore($name);
 
 ### Uploading geographic files
 
-Uploading a file to a geoserver instance is done via the `upload` method.
+Uploading a file to a GeoServer instance is done via the `upload` method.
 
 The client recognizes the format and create a correct store type, e.g. shapefiles lead to a 
 datastore creation. To do so the file path must be wrapped in a `GeoFile` object.
 
-> See [Supported files](#supported-file-formats) for knowing what the library can handle
+> See [Supported files](./supported-files.md) for knowing what the library can handle
 
 ```php
 use OneOffTech\GeoServer\GeoFile;
@@ -135,7 +140,7 @@ From a GeoFile instance the file `mimeType`, `format` and `type` (`vector` or `r
 The `format` is used to specify the content of the file, as in some cases Geographic files do not have a standard mime type. 
 For example a Shapefile mime type is `application/octet-stream`, which means a binary file.
 
-The `originalName` attribute contains the original filename and a `name` property. By default `originalName` and `name` are equals, 
+The `originalName` attribute contains the original filename. By default `originalName` and `name` are equals, 
 but the name can be changed, by using the `name($value)` method. The `name` will be used as the store name inside GeoServer.
 
 Once obtained a `GeoFile` instance, the method `upload()` can be used to really upload the file to the GeoServer:
@@ -149,7 +154,7 @@ $feature = $geoserver->upload($file);
 // OneOffTech\GeoServer\Models\Resource
 ```
 
-> For file character encoding please refer to [File Character Encoding](#file-character-encoding)
+> For file character encoding please refer to [File Character Encoding](./supported-files.md#file-character-encoding)
 
 Once uploaded, the return value will be an instance of the `OneOffTech\GeoServer\Models\Resource`.
 It contains the details extracted by the GeoServer, like the bounding box.
