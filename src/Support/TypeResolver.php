@@ -104,7 +104,7 @@ final class TypeResolver
             }
         } elseif ($mimeType === 'image/tiff' && BinaryReader::isGeoTiff($path)) {
             $format = GeoFormat::GEOTIFF;
-        } elseif ($mimeType === 'application/xml') {
+        } elseif ($mimeType === 'application/xml' || $mimeType === 'text/xml') {
 
             // check if Style tag is present
             $data = join('', TextReader::readLines($path, 2));
