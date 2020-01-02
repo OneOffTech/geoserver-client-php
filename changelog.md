@@ -15,6 +15,12 @@ This project adhere to Semantic Versioning.
 ### Fixed
 ### Security
 
+## [0.2.1] - 2018-10-23
+
+### Fixed
+
+- Style format identification on PHP 7.2 and 7.3
+
 ## [0.2.0] - 2018-10-23
 
 ### Changed
