@@ -15,6 +15,7 @@ php:
   - 7.1
   - 7.2
   - 7.3
+  - 7.4
 
 env:
   global:
@@ -22,8 +23,8 @@ env:
     - GEOSERVER_USER="admin"
     - GEOSERVER_PASSWORD="geoserver"
   matrix:
-    # - COMPOSER_FLAGS="--prefer-lowest"
-    - COMPOSER_FLAGS=""
+    - COMPOSER_FLAGS="--prefer-lowest"
+    - COMPOSER_FLAGS="--prefer-stable"
 
 before_script:
   - travis_retry composer self-update

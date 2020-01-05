@@ -31,7 +31,7 @@ trait SetupIntegrationTest
      */
     protected $geoserver = null;
     
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
