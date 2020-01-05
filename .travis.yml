@@ -26,6 +26,11 @@ env:
     - COMPOSER_FLAGS="--prefer-lowest"
     - COMPOSER_FLAGS="--prefer-stable"
 
+matrix:
+  exclude:
+    - php: 7.4
+      env: COMPOSER_FLAGS="--prefer-lowest"
+
 before_script:
   - travis_retry composer self-update
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-dist
