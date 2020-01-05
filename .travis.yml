@@ -25,6 +25,7 @@ env:
   matrix:
     - COMPOSER_FLAGS="--prefer-lowest"
     - COMPOSER_FLAGS="--prefer-stable"
+    - COMPOSER_FLAGS="--prefer-stable" GEOSERVER_TAG="2.15.2"
 
 matrix:
   exclude:
