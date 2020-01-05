@@ -96,7 +96,6 @@ trait InteractsWithHttp
     protected function serialize($object)
     {
         try {
-            var_dump($object);
             return $this->serializer->serialize($object, 'json');
         } catch (Throwable $ex) {
             throw new SerializationException($ex->getMessage());
