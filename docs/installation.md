@@ -3,7 +3,7 @@
 The GeoServer client uses [Composer](http://getcomposer.org/) to manage its dependencies. 
 
 ```bash
-composer require php-http/guzzle6-adapter guzzlehttp/psr7 oneofftech/geoserver-client-php
+composer require php-http/guzzle6-adapter guzzlehttp/psr7 http-interop/http-factory-guzzle oneofftech/geoserver-client-php
 ```
 
 The GeoServer client is not hard coupled to [Guzzle](https://github.com/guzzle/guzzle) or any other library that sends HTTP messages. It uses an abstraction called [HTTPlug](http://httplug.io/). This will give you the flexibilty to choose what PSR-7 implementation and HTTP client to use.

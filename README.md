@@ -28,7 +28,7 @@ For detailed information of each of the provided functions check out the [docume
 The GeoServer PHP Client uses [Composer](http://getcomposer.org/) to manage its dependencies.
 
 ```bash
-composer require php-http/guzzle6-adapter guzzlehttp/psr7 oneofftech/geoserver-client-php
+composer require php-http/guzzle6-adapter guzzlehttp/psr7 http-interop/http-factory-guzzle oneofftech/geoserver-client-php
 ```
 
 For more information, please review the [documentation on the installation process](./docs/installation.md).
