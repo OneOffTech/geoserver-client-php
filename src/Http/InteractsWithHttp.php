@@ -95,13 +95,14 @@ trait InteractsWithHttp
 
     protected function serialize($object)
     {
-        try {
+        // try {
+            var_dump($object);
             return $this->serializer->serialize($object, 'json');
-        } catch (Throwable $ex) {
-            throw new SerializationException($ex->getMessage());
-        } catch (Exception $ex) {
-            throw new SerializationException($ex->getMessage());
-        }
+        // } catch (Throwable $ex) {
+        //     throw new SerializationException($ex->getMessage());
+        // } catch (Exception $ex) {
+        //     throw new SerializationException($ex->getMessage());
+        // }
     }
 
     /**
