@@ -157,6 +157,15 @@ trait InteractsWithHttp
 
         return $this->deserialize($response, $class);
     }
+    
+    protected function postFile($route, $data, $class = null)
+    {
+        $request = $this->messageFactory->createRequest('POST', $route, ['Content-Type' => $data->normalizedMimeType], $data->content());
+
+        $response = $this->handleRequest($request);
+
+        return $this->deserialize($response, $class);
+    }
 
     protected function delete($route, $class = null)
     {

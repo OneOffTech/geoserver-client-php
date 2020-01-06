@@ -45,7 +45,7 @@ class GeoServerStylesTest extends TestCase
         $this->assertInstanceOf(Style::class, $style);
         $this->assertEquals($styleName, $style->name);
         $this->assertEquals(getenv('GEOSERVER_WORKSPACE'), $style->workspace);
-        $this->assertEquals('style.sld', $style->filename);
+        $this->assertEquals('style_test.sld', $style->filename);
         $this->assertEquals('sld', $style->format);
         $this->assertEquals('1.0.0', $style->version);
         $this->assertTrue($style->exists, "Style not existing");
@@ -63,7 +63,7 @@ class GeoServerStylesTest extends TestCase
         $this->assertInstanceOf(Style::class, $style);
         $this->assertEquals($styleName, $style->name);
         $this->assertEquals(getenv('GEOSERVER_WORKSPACE'), $style->workspace);
-        $this->assertEquals('style.sld', $style->filename);
+        $this->assertEquals('style_test.sld', $style->filename);
         $this->assertEquals('sld', $style->format);
         $this->assertEquals('1.0.0', $style->version);
         $this->assertTrue($style->exists, "Style not existing");
@@ -93,7 +93,7 @@ class GeoServerStylesTest extends TestCase
         $this->assertInstanceOf(Style::class, $style);
         $this->assertEquals($styleName, $style->name);
         $this->assertEquals(getenv('GEOSERVER_WORKSPACE'), $style->workspace);
-        $this->assertEquals('style.sld', $style->filename);
+        $this->assertEquals('style_test.sld', $style->filename);
         $this->assertEquals('sld', $style->format);
         $this->assertEquals('1.0.0', $style->version);
         $this->assertFalse($style->exists, "Style still exists after deletion");

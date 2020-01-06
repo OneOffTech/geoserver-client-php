@@ -510,26 +510,22 @@ final class GeoServer
      */
     public function uploadStyle(StyleFile $file)
     {
-        $initialPostRoute = $this->routes->url("workspaces/$this->workspace/styles");
-        $filePutRoute = $this->routes->url("workspaces/$this->workspace/styles/$file->name");
+        $filePostRoute = $this->routes->url("workspaces/$this->workspace/styles");
 
         try {
-            $postResponse = $this->post($initialPostRoute, [
-                'style' => [
-                    'name' => $file->name,
-                    'filename' => $file->originalName,
-                ]
-            ]);
+            $postFileResponse = $this->postFile($filePostRoute . '?name=' . $file->name, $file);
+
         } catch (ErrorResponseException $ex) {
             // we receive a 500 error response if the style already exists
             if ($ex->getData() === "Style named '$file->name' already exists in workspace $this->workspace") {
                 throw StyleAlreadyExistsException::style($file->name, $this->workspace);
             }
+            if (strpos($ex->getData(), "Style $file->name already exists") !== false) {
+                throw StyleAlreadyExistsException::style($file->name, $this->workspace);
+            }
 
             throw $ex;
         }
-
-        $putFileResponse = $this->putFile($filePutRoute, $file);
 
         return $this->style($file->name);
     }
