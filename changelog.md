@@ -15,7 +15,20 @@ This project adhere to Semantic Versioning.
 ### Fixed
 ### Security
 
-## [0.2.1] - 2018-10-23
+## [0.3.0] - 2020-01-06
+
+### Added
+
+- Support for PHP 7.4
+- Support for GeoServer 2.15.x
+
+### Changed
+
+- Style upload original filename is not preserved anymore. The file name will be the same as the given name via `StyleFile->name()` 
+  (if not specified the default value is equal to the filename without the extension)
+- Style files are directly uploaded in the workspace without a first request to create an empty style
+
+## [0.2.1] - 2020-01-02
 
 ### Fixed
 
