@@ -34,22 +34,22 @@ class DeserializeDataStoreResponseSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
-        return array(
-            array(
+        return [
+            [
                 'event' => 'serializer.pre_deserialize',
                 'method' => 'onPreDeserialize',
                 'class' => 'OneOffTech\\GeoServer\\Models\\DataStore',
                 'format' => 'json',
                 'priority' => 0,
-            ),
-            array(
+            ],
+            [
                 'event' => 'serializer.pre_deserialize',
                 'method' => 'onPreDeserialize',
                 'class' => 'OneOffTech\\GeoServer\\Http\\Responses\\DataStoreResponse',
                 'format' => 'json',
                 'priority' => 0,
-            ),
-        );
+            ],
+        ];
     }
 
     public function onPreDeserialize(PreDeserializeEvent $event)

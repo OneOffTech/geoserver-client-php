@@ -31,24 +31,24 @@ class GeoFileTest extends TestCase
     public function supported_files()
     {
         return [
-            [__DIR__ . '/../fixtures/shapefile.shp'],
-            [__DIR__ . '/../fixtures/shapefile.zip'],
-            [__DIR__ . '/../fixtures/geotiff.tiff'],
-            [__DIR__ . '/../fixtures/empty.gpkg'],
+            [__DIR__.'/../fixtures/shapefile.shp'],
+            [__DIR__.'/../fixtures/shapefile.zip'],
+            [__DIR__.'/../fixtures/geotiff.tiff'],
+            [__DIR__.'/../fixtures/empty.gpkg'],
         ];
     }
     
     public function unsupported_files()
     {
         return [
-            [__DIR__ . '/../fixtures/plain.json'],
-            [__DIR__ . '/../fixtures/plain.zip'],
-            [__DIR__ . '/../fixtures/tiff.tif'],
-            [__DIR__ . '/../fixtures/geojson.geojson'],
-            [__DIR__ . '/../fixtures/geojson-in-plain-json.json'],
-            [__DIR__ . '/../fixtures/kml.kml'],
-            [__DIR__ . '/../fixtures/kmz.kmz'],
-            [__DIR__ . '/../fixtures/gpx.gpx'],
+            [__DIR__.'/../fixtures/plain.json'],
+            [__DIR__.'/../fixtures/plain.zip'],
+            [__DIR__.'/../fixtures/tiff.tif'],
+            [__DIR__.'/../fixtures/geojson.geojson'],
+            [__DIR__.'/../fixtures/geojson-in-plain-json.json'],
+            [__DIR__.'/../fixtures/kml.kml'],
+            [__DIR__.'/../fixtures/kmz.kmz'],
+            [__DIR__.'/../fixtures/gpx.gpx'],
         ];
     }
 
@@ -68,10 +68,9 @@ class GeoFileTest extends TestCase
         $this->assertFalse(GeoFile::isSupported($file));
     }
 
-
     public function test_shapefile_is_recognized()
     {
-        $file = GeoFile::from(__DIR__ . '/../fixtures/shapefile.shp');
+        $file = GeoFile::from(__DIR__.'/../fixtures/shapefile.shp');
 
         $this->assertInstanceOf(GeoFile::class, $file);
         $this->assertEquals(GeoFormat::SHAPEFILE, $file->format);
@@ -84,7 +83,7 @@ class GeoFileTest extends TestCase
     
     public function test_shapefile_packed_in_zip_is_recognized()
     {
-        $file = GeoFile::from(__DIR__ . '/../fixtures/shapefile.zip');
+        $file = GeoFile::from(__DIR__.'/../fixtures/shapefile.zip');
 
         $this->assertInstanceOf(GeoFile::class, $file);
         $this->assertEquals(GeoFormat::SHAPEFILE_ZIP, $file->format);
@@ -97,7 +96,7 @@ class GeoFileTest extends TestCase
 
     public function test_geotiff_is_recognized()
     {
-        $file = GeoFile::from(__DIR__ . '/../fixtures/geotiff.tiff');
+        $file = GeoFile::from(__DIR__.'/../fixtures/geotiff.tiff');
 
         $this->assertInstanceOf(GeoFile::class, $file);
         $this->assertEquals(GeoFormat::GEOTIFF, $file->format);
@@ -110,7 +109,7 @@ class GeoFileTest extends TestCase
 
     public function test_geopackage_is_recognized()
     {
-        $file = GeoFile::from(__DIR__ . '/../fixtures/empty.gpkg');
+        $file = GeoFile::from(__DIR__.'/../fixtures/empty.gpkg');
 
         $this->assertInstanceOf(GeoFile::class, $file);
         $this->assertEquals(GeoFormat::GEOPACKAGE, $file->format);
@@ -123,7 +122,7 @@ class GeoFileTest extends TestCase
 
     public function test_copy_to_temporary()
     {
-        $file = GeoFile::from(__DIR__ . '/../fixtures/buildings.zip');
+        $file = GeoFile::from(__DIR__.'/../fixtures/buildings.zip');
 
         $this->assertInstanceOf(GeoFile::class, $file);
         $this->assertEquals(GeoFormat::SHAPEFILE_ZIP, $file->format);

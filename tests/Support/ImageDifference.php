@@ -28,7 +28,7 @@ class ImageDifference
 
     /**
      * Calculate the difference between two images
-     * 
+     *
      * @param string $expected The path of the image ground truth
      * @param string $actual The actual image to compare
      * @return float the percentage of difference between the two images
@@ -40,7 +40,10 @@ class ImageDifference
         list($actualImage) = static::imageFromFile($actual);
 
         $differenceBitmap = static::calculateDifference(
-            $expectedImage, $actualImage, $expectedImagewidth, $expectedImageHeight
+            $expectedImage,
+            $actualImage,
+            $expectedImagewidth,
+            $expectedImageHeight
         );
 
         return static::calculateDifferencePercentage($differenceBitmap, $expectedImagewidth, $expectedImageHeight);
@@ -48,7 +51,7 @@ class ImageDifference
 
     /**
      * Load a bitmap array from image path.
-     * 
+     *
      * @param string $path
      *
      * @return array
@@ -72,7 +75,7 @@ class ImageDifference
             $image = imagecreatefrompng($path);
         }
 
-        if (!$image) {
+        if (! $image) {
             throw new InvalidArgumentException("invalid image [{$path}]");
         }
 

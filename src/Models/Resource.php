@@ -102,7 +102,6 @@ abstract class Resource extends Model
      */
     public $keywords;
 
-
     /**
      * Returns the bounds of the resource in its declared CRS.
      *

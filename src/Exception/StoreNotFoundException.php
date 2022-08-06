@@ -35,7 +35,6 @@ class StoreNotFoundException extends GeoServerClientException
         parent::__construct($message, 404);
     }
 
-
     /**
      * Create a store not found exception for a data store
      *

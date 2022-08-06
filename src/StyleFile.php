@@ -50,14 +50,13 @@ class StyleFile
      */
     protected $normalizedMimeType;
 
-
     public function __construct($path)
     {
         $this->file = new SplFileInfo($path);
 
         list($format, $type, $mimeType) = TypeResolver::identify($path);
 
-        if (!in_array($format, TypeResolver::supportedFormats())) {
+        if (! in_array($format, TypeResolver::supportedFormats())) {
             throw new UnsupportedFileException($path, $format, join(', ', TypeResolver::supportedFormats()));
         }
 
@@ -90,7 +89,6 @@ class StyleFile
         return file_get_contents($this->file->getRealPath());
     }
 
-
     public function __get($property)
     {
         return $this->$property;
@@ -111,8 +109,6 @@ class StyleFile
     {
         return static::from($path);
     }
-
-
 
     /**
      * Check if the specified file is a valid style file

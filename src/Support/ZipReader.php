@@ -28,7 +28,6 @@ use OneOffTech\GeoServer\Contracts\FileReader;
 final class ZipReader extends FileReader
 {
 
-    
     /**
      * Read a 32 bit integer from the beginning of a file
      *

@@ -26,9 +26,7 @@ use Throwable;
 use Http\Client\HttpClient;
 use Http\Message\MessageFactory;
 use Psr\Http\Message\ResponseInterface;
-use OneOffTech\GeoServer\Http\ResponseHelper;
 use OneOffTech\GeoServer\Support\ImageResponse;
-use OneOffTech\GeoServer\Exception\InvalidDataException;
 use OneOffTech\GeoServer\Exception\ErrorResponseException;
 use OneOffTech\GeoServer\Exception\SerializationException;
 use OneOffTech\GeoServer\Exception\DeserializationException;
@@ -51,7 +49,6 @@ trait InteractsWithHttp
      */
     private $serializer;
     
-
     /**
      * @param ResponseInterface $response
      * @throws ErrorResponseException
@@ -60,14 +57,14 @@ trait InteractsWithHttp
     {
         $responseBody = $response->getBody();
         $contentTypeHeader = $response->getHeader('Content-Type');
-        $contentType = !empty($contentTypeHeader) ? $contentTypeHeader[0] : '';
+        $contentType = ! empty($contentTypeHeader) ? $contentTypeHeader[0] : '';
         if ($response->getStatusCode() !== 200 && $response->getStatusCode() !== 201 && $response->getStatusCode() !== 204) {
             if ($response->getStatusCode() === 500 && strpos($contentType, 'text/html')!== false) {
                 $reason = substr((string)$responseBody, 0, 500);
 
                 throw new ErrorResponseException($reason, $response->getStatusCode(), (string)$responseBody);
             }
-            throw new ErrorResponseException(!empty($response->getReasonPhrase()) ? $response->getReasonPhrase() : 'There was a problem in fulfilling your request.', $response->getStatusCode(), (string)$responseBody);
+            throw new ErrorResponseException(! empty($response->getReasonPhrase()) ? $response->getReasonPhrase() : 'There was a problem in fulfilling your request.', $response->getStatusCode(), (string)$responseBody);
         }
     }
 
@@ -182,10 +179,10 @@ trait InteractsWithHttp
         $response = $this->handleRequest($request);
 
         $contentTypeHeader = $response->getHeader('Content-Type');
-        $contentType = !empty($contentTypeHeader) ? $contentTypeHeader[0] : '';
+        $contentType = ! empty($contentTypeHeader) ? $contentTypeHeader[0] : '';
 
         if ($response->getStatusCode() !== 200 && $response->getStatusCode() !== 201 && $response->getStatusCode() !== 204) {
-            throw new ErrorResponseException(!empty($response->getReasonPhrase()) ? $response->getReasonPhrase() : 'There was a problem in fulfilling your request.', $response->getStatusCode(), (string)$responseBody);
+            throw new ErrorResponseException(! empty($response->getReasonPhrase()) ? $response->getReasonPhrase() : 'There was a problem in fulfilling your request.', $response->getStatusCode(), (string)$responseBody);
         }
 
         if (strpos($contentType, 'image') === false) {

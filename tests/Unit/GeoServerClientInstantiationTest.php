@@ -22,16 +22,8 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 use OneOffTech\GeoServer\GeoServer;
-use JMS\Serializer\SerializerBuilder;
-use Psr\Http\Message\RequestInterface;
-use Http\Mock\Client as HttpMockClient;
-use Http\Discovery\MessageFactoryDiscovery;
 use OneOffTech\GeoServer\Auth\Authentication;
-use OneOffTech\GeoServer\Http\RequestFactory;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 
 class GeoServerClientInstantiationTest extends TestCase
 {

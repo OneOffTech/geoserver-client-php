@@ -22,17 +22,11 @@
 namespace Tests\Integration;
 
 use Tests\TestCase;
-use GuzzleHttp\Psr7\Request;
 use OneOffTech\GeoServer\GeoFile;
 use OneOffTech\GeoServer\GeoType;
-use Psr\Http\Message\RequestInterface;
 use Tests\Concern\SetupIntegrationTest;
-use OneOffTech\GeoServer\Models\Feature;
 use OneOffTech\GeoServer\Models\Coverage;
-use OneOffTech\GeoServer\Models\Workspace;
 use OneOffTech\GeoServer\Models\CoverageStore;
-use OneOffTech\GeoServer\Exception\InvalidDataException;
-use OneOffTech\GeoServer\Exception\ErrorResponseException;
 use OneOffTech\GeoServer\Exception\StoreNotFoundException;
 
 class GeoServerCoverageStoresTest extends TestCase
@@ -42,7 +36,7 @@ class GeoServerCoverageStoresTest extends TestCase
     public function test_geotiff_can_be_uploaded()
     {
         $storeName = 'geotiff_test';
-        $data = GeoFile::from(__DIR__ . '/../fixtures/geotiff.tiff')->name($storeName);
+        $data = GeoFile::from(__DIR__.'/../fixtures/geotiff.tiff')->name($storeName);
 
         $coverage = $this->geoserver->upload($data);
 
@@ -128,7 +122,7 @@ class GeoServerCoverageStoresTest extends TestCase
     public function test_geotiff_upload_and_deleted()
     {
         $storeName = 'geotiff_test';
-        $data = GeoFile::from(__DIR__ . '/../fixtures/geotiff.tiff')->name($storeName);
+        $data = GeoFile::from(__DIR__.'/../fixtures/geotiff.tiff')->name($storeName);
 
         $feature = $this->geoserver->upload($data);
 

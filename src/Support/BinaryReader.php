@@ -64,7 +64,6 @@ final class BinaryReader extends FileReader
         return self::readData($path, 's', 2, $position);
     }
     
-
     public static function isGeoTiff($path)
     {
         $handle = self::openFileBinary($path);
@@ -81,9 +80,9 @@ final class BinaryReader extends FileReader
             return false;
         }
 
-        $byteOrder = current(unpack('a', $tiffHeader)) . current(unpack('a', $tiffHeader, 1));
+        $byteOrder = current(unpack('a', $tiffHeader)).current(unpack('a', $tiffHeader, 1));
 
-        if (!in_array($byteOrder, ['MM', 'II'])) {
+        if (! in_array($byteOrder, ['MM', 'II'])) {
             // unknown byte order
             self::closeFile($handle);
             return false;
@@ -108,7 +107,6 @@ final class BinaryReader extends FileReader
         fseek($handle, $byteOffset+2);
 
         $imageFileDirectoriesData = fread($handle, (12 * $numDirEntries)+12);
-
 
         // from the Image File Directories record in the TIFF file I need the GeoKeyDirectory
         // and the values in the GeoKeyDirectory, which has field code 34735

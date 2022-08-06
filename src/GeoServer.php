@@ -24,15 +24,12 @@ namespace OneOffTech\GeoServer;
 use Exception;
 use OneOffTech\GeoServer\Http\Routes;
 use OneOffTech\GeoServer\Models\Style;
-use Psr\Http\Message\ResponseInterface;
 use OneOffTech\GeoServer\Models\Feature;
 use OneOffTech\GeoServer\Models\Resource;
 use OneOffTech\GeoServer\Models\DataStore;
 use OneOffTech\GeoServer\Models\Workspace;
 use OneOffTech\GeoServer\Support\ZipReader;
 use OneOffTech\GeoServer\Support\WmsOptions;
-use OneOffTech\GeoServer\Models\CoverageStore;
-use OneOffTech\GeoServer\Support\ImageResponse;
 use OneOffTech\GeoServer\Http\InteractsWithHttp;
 use OneOffTech\GeoServer\Auth\NullAuthentication;
 use OneOffTech\GeoServer\Contracts\Authentication;
@@ -47,7 +44,6 @@ use OneOffTech\GeoServer\Http\Responses\WorkspaceResponse;
 use OneOffTech\GeoServer\Http\Responses\CoverageStoreResponse;
 use OneOffTech\GeoServer\Exception\StyleAlreadyExistsException;
 use OneOffTech\GeoServer\Http\Responses\CoverageStoresResponse;
-use OneOffTech\GeoServer\Exception\AuthTypeNotSupportedException;
 
 final class GeoServer
 {
@@ -89,7 +85,6 @@ final class GeoServer
 
         return "$geoserver->Version";
     }
-
 
     /**
      * Retrieve the workspace information.
@@ -214,7 +209,6 @@ final class GeoServer
         return $response->feature;
     }
 
-
     /**
      * Retrieve the list of coverage stores defined in the workspace.
      * A data store contains raster format spatial data.
@@ -321,7 +315,7 @@ final class GeoServer
             $nameWithoutExtension = rtrim($file->name, $file->extension);
             
             // check the content if modifications are required
-            if (!in_array("$nameWithoutExtension.shp", $contentList)) {
+            if (! in_array("$nameWithoutExtension.shp", $contentList)) {
 
                 // if yes, clone the content and do the filename edits to
                 // make sure that files inside the zip are correctly named
@@ -361,7 +355,6 @@ final class GeoServer
         return $this->coverage($file->name);
     }
 
-
     /**
      * Check if a specified GeoFile was uploaded to the Geoserver
      * The check will attempt to find the store that matches the given name
@@ -376,7 +369,7 @@ final class GeoServer
         try {
             $found = $this->{$store}($file->name);
     
-            if (!is_null($found)) {
+            if (! is_null($found)) {
                 return true;
             }
     
@@ -408,7 +401,6 @@ final class GeoServer
         return false;
     }
 
-
     /**
      * Get the Web Map Service (WMS) map URL for the specified resource
      *
@@ -417,7 +409,7 @@ final class GeoServer
      */
     public function wmsMapUrl($data, ?WmsOptions $wmsOptions = null)
     {
-        if (!($data instanceof GeoFile || $data instanceof Resource)) {
+        if (! ($data instanceof GeoFile || $data instanceof Resource)) {
             throw new InvalidArgumentException("Data must be a GeoFile or Resource instance.");
         }
 
@@ -431,7 +423,6 @@ final class GeoServer
         return $this->routes->wms($this->workspace, $options);
     }
 
-
     /**
      * Attempt to retrieve a thumbnail of a previously uploaded
      * GeoFile or Resource using the Web Map Service
@@ -441,7 +432,7 @@ final class GeoServer
      */
     public function thumbnail($data, $width = 300, $height = 300)
     {
-        if (!($data instanceof GeoFile || $data instanceof Resource)) {
+        if (! ($data instanceof GeoFile || $data instanceof Resource)) {
             throw new InvalidArgumentException("Data must be a GeoFile or Resource instance.");
         }
 
@@ -455,8 +446,6 @@ final class GeoServer
         
         return $this->getImage($url);
     }
-
-
 
     /**
      * Get a style by its name.
@@ -513,8 +502,7 @@ final class GeoServer
         $filePostRoute = $this->routes->url("workspaces/$this->workspace/styles");
 
         try {
-            $postFileResponse = $this->postFile($filePostRoute . '?name=' . $file->name, $file);
-
+            $postFileResponse = $this->postFile($filePostRoute.'?name='.$file->name, $file);
         } catch (ErrorResponseException $ex) {
             // we receive a 500 error response if the style already exists
             if ($ex->getData() === "Style named '$file->name' already exists in workspace $this->workspace") {

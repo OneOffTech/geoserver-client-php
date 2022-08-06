@@ -22,16 +22,9 @@
 namespace Tests\Integration;
 
 use Tests\TestCase;
-use GuzzleHttp\Psr7\Request;
 use OneOffTech\GeoServer\GeoFile;
-use Psr\Http\Message\RequestInterface;
 use Tests\Concern\SetupIntegrationTest;
-use OneOffTech\GeoServer\Models\Feature;
-use OneOffTech\GeoServer\Models\DataStore;
-use OneOffTech\GeoServer\Models\Workspace;
 use OneOffTech\GeoServer\Support\ImageResponse;
-use OneOffTech\GeoServer\Exception\InvalidDataException;
-use OneOffTech\GeoServer\Exception\ErrorResponseException;
 use Tests\Support\ImageDifference;
 
 class GeoServerWmsTest extends TestCase
@@ -41,7 +34,7 @@ class GeoServerWmsTest extends TestCase
     public function test_wms_url_is_generated_for_shapefile()
     {
         $datastoreName = 'shapefile_test';
-        $file = GeoFile::from(__DIR__ . '/../fixtures/shapefile.shp')->name($datastoreName);
+        $file = GeoFile::from(__DIR__.'/../fixtures/shapefile.shp')->name($datastoreName);
 
         $resource = $this->geoserver->upload($file);
 
@@ -60,7 +53,7 @@ class GeoServerWmsTest extends TestCase
     public function test_wms_url_is_generated_for_geotiff()
     {
         $datastoreName = 'geotiff_test';
-        $file = GeoFile::from(__DIR__ . '/../fixtures/geotiff.tiff')->name($datastoreName);
+        $file = GeoFile::from(__DIR__.'/../fixtures/geotiff.tiff')->name($datastoreName);
 
         $resource = $this->geoserver->upload($file);
 
@@ -76,11 +69,10 @@ class GeoServerWmsTest extends TestCase
         $deleteResult = $this->geoserver->remove($file);
     }
 
-
     public function test_shapefile_thumbnail()
     {
         $datastoreName = 'shapefile_test';
-        $file = GeoFile::from(__DIR__ . '/../fixtures/shapefile.shp')->name($datastoreName);
+        $file = GeoFile::from(__DIR__.'/../fixtures/shapefile.shp')->name($datastoreName);
 
         $resource = $this->geoserver->upload($file);
 
@@ -98,13 +90,14 @@ class GeoServerWmsTest extends TestCase
 
         // compare the image difference against a reference thumbnail
 
-        file_put_contents(__DIR__ . '/../fixtures/shapefile_thumbnail_from_geoserver.png', $thumbnail->asString());
+        file_put_contents(__DIR__.'/../fixtures/shapefile_thumbnail_from_geoserver.png', $thumbnail->asString());
         
         $differencePercentage = ImageDifference::calculate(
-            __DIR__ . '/../fixtures/shapefile_thumbnail.png',
-            __DIR__ . '/../fixtures/shapefile_thumbnail_from_geoserver.png');
+            __DIR__.'/../fixtures/shapefile_thumbnail.png',
+            __DIR__.'/../fixtures/shapefile_thumbnail_from_geoserver.png'
+        );
 
-        unlink(__DIR__ . '/../fixtures/shapefile_thumbnail_from_geoserver.png');
+        unlink(__DIR__.'/../fixtures/shapefile_thumbnail_from_geoserver.png');
         $deleteResult = $this->geoserver->remove($file);
 
         // considering a 20% difference as acceptable

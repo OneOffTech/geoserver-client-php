@@ -21,7 +21,6 @@
 
 namespace OneOffTech\GeoServer\Support;
 
-use Exception;
 use Psr\Http\Message\ResponseInterface;
 
 final class ImageResponse

@@ -22,13 +22,9 @@
 namespace Tests\Integration;
 
 use Tests\TestCase;
-use GuzzleHttp\Psr7\Request;
 use OneOffTech\GeoServer\StyleFile;
-use Psr\Http\Message\RequestInterface;
 use OneOffTech\GeoServer\Models\Style;
 use Tests\Concern\SetupIntegrationTest;
-use OneOffTech\GeoServer\Exception\InvalidDataException;
-use OneOffTech\GeoServer\Exception\ErrorResponseException;
 use OneOffTech\GeoServer\Exception\StyleNotFoundException;
 
 class GeoServerStylesTest extends TestCase
@@ -38,7 +34,7 @@ class GeoServerStylesTest extends TestCase
     public function test_styles_can_be_uploaded()
     {
         $styleName = 'style_test';
-        $data = StyleFile::from(__DIR__ . '/../fixtures/style.sld')->name($styleName);
+        $data = StyleFile::from(__DIR__.'/../fixtures/style.sld')->name($styleName);
 
         $style = $this->geoserver->uploadStyle($data);
 

@@ -22,11 +22,7 @@
 namespace Tests\Integration;
 
 use Tests\TestCase;
-use GuzzleHttp\Psr7\Request;
-use Psr\Http\Message\RequestInterface;
 use Tests\Concern\SetupIntegrationTest;
-use OneOffTech\GeoServer\Exception\InvalidDataException;
-use OneOffTech\GeoServer\Exception\ErrorResponseException;
 
 class GeoServerVersionRetrievalTest extends TestCase
 {

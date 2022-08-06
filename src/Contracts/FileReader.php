@@ -27,11 +27,11 @@ abstract class FileReader
 {
     protected static function openFile($path)
     {
-        if (!(is_readable($path) && is_file($path))) {
+        if (! (is_readable($path) && is_file($path))) {
             throw new Exception("File [$path] not readable");
         }
         $handle = fopen($path, 'r');
-        if (!$handle) {
+        if (! $handle) {
             throw new Exception("Unable to read [$path] as binary file");
         }
 
@@ -40,11 +40,11 @@ abstract class FileReader
     
     protected static function openFileBinary($path, $position = 0)
     {
-        if (!(is_readable($path) && is_file($path))) {
+        if (! (is_readable($path) && is_file($path))) {
             throw new Exception("File [$path] not readable");
         }
         $handle = fopen($path, 'rb');
-        if (!$handle) {
+        if (! $handle) {
             throw new Exception("Unable to read [$path] as binary file");
         }
 
