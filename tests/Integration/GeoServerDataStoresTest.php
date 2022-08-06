@@ -252,10 +252,10 @@ class GeoServerDataStoresTest extends TestCase
         $this->assertNotNull($feature->nativeBoundingBox);
         $this->assertNotNull($feature->boundingBox);
         $this->assertEquals("EPSG:4326", $feature->boundingBox->crs);
-        $this->assertEquals(-165.18163033675, $feature->boundingBox->minX);
-        $this->assertEquals(-50.786361166949, $feature->boundingBox->minY);
-        $this->assertEquals(176.5891535779, $feature->boundingBox->maxX);
-        $this->assertEquals(73.578794485117, $feature->boundingBox->maxY);
+        $this->assertEquals(-180.00000000000003, $feature->boundingBox->minX);
+        $this->assertEquals(-85, $feature->boundingBox->minY);
+        $this->assertEquals(180.00000000000003, $feature->boundingBox->maxX);
+        $this->assertEquals(85, $feature->boundingBox->maxY);
 
         $this->assertTrue($this->geoserver->exist($data), "Data not existing after upload");
         
