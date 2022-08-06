@@ -1,0 +1,56 @@
+name: run-tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ubuntu-latest]
+        php: [7.4] 
+        stability: [prefer-stable] # prefer-lowest
+
+    name: P${{ matrix.php }} - ${{ matrix.stability }} - ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
+          coverage: none
+
+      - name: Setup problem matchers
+        run: |
+          echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+          echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Install dependencies
+        run: |
+          composer update --${{ matrix.stability }} --prefer-dist --no-interaction
+      
+      - name: Create Environment
+        run: |
+          docker-compose -f ./tests/docker-compose.yml up -d
+          php ./tests/wait.php
+
+      - name: Execute tests
+        env:
+          GEOSERVER_URL: "http://127.0.0.1:8600/geoserver/"
+          GEOSERVER_USER: "admin"
+          GEOSERVER_PASSWORD: "geoserver"
+        run: vendor/bin/phpunit
+
+      - name: Stop Environment
+        if: always()
+        run: |
+          docker-compose -f ./tests/docker-compose.yml down

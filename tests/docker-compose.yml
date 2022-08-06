@@ -8,7 +8,7 @@ networks:
 
 services:
   geoserver:
-    image: "kartoza/geoserver:${GEOSERVER_TAG:-2.13.0}"
+    image: "kartoza/geoserver:${GEOSERVER_TAG:-2.17.0}"
     env_file:
         - geoserver.env
     ports:

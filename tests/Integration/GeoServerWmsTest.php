@@ -24,14 +24,12 @@ namespace Tests\Integration;
 use Tests\TestCase;
 use GuzzleHttp\Psr7\Request;
 use OneOffTech\GeoServer\GeoFile;
-use Undemanding\Difference\Image;
 use Psr\Http\Message\RequestInterface;
 use Tests\Concern\SetupIntegrationTest;
 use OneOffTech\GeoServer\Models\Feature;
 use OneOffTech\GeoServer\Models\DataStore;
 use OneOffTech\GeoServer\Models\Workspace;
 use OneOffTech\GeoServer\Support\ImageResponse;
-use Undemanding\Difference\Method\EuclideanDistance;
 use OneOffTech\GeoServer\Exception\InvalidDataException;
 use OneOffTech\GeoServer\Exception\ErrorResponseException;
 
@@ -78,39 +76,39 @@ class GeoServerWmsTest extends TestCase
     }
 
 
-    public function test_shapefile_thumbnail()
-    {
-        $datastoreName = 'shapefile_test';
-        $file = GeoFile::from(__DIR__ . '/../fixtures/shapefile.shp')->name($datastoreName);
+    // public function test_shapefile_thumbnail()
+    // {
+    //     $datastoreName = 'shapefile_test';
+    //     $file = GeoFile::from(__DIR__ . '/../fixtures/shapefile.shp')->name($datastoreName);
 
-        $resource = $this->geoserver->upload($file);
+    //     $resource = $this->geoserver->upload($file);
 
-        $thumbnail = $this->geoserver->thumbnail($resource);
+    //     $thumbnail = $this->geoserver->thumbnail($resource);
 
-        $this->assertInstanceOf(ImageResponse::class, $thumbnail);
-        $this->assertEquals('image/png', $thumbnail->mimeType());
+    //     $this->assertInstanceOf(ImageResponse::class, $thumbnail);
+    //     $this->assertEquals('image/png', $thumbnail->mimeType());
 
-        $imageAsString = $thumbnail->asString();
+    //     $imageAsString = $thumbnail->asString();
 
-        list($width, $height) = getimagesizefromstring($imageAsString);
+    //     list($width, $height) = getimagesizefromstring($imageAsString);
 
-        $this->assertEquals(300, $width);
-        $this->assertEquals(300, $height);
+    //     $this->assertEquals(300, $width);
+    //     $this->assertEquals(300, $height);
 
-        // compare the image difference against a reference thumbnail
+    //     // compare the image difference against a reference thumbnail
 
-        $image1 = new Image(__DIR__ . '/../fixtures/shapefile_thumbnail.png');
+    //     $image1 = new Image(__DIR__ . '/../fixtures/shapefile_thumbnail.png');
 
-        file_put_contents(__DIR__ . '/../fixtures/shapefile_thumbnail_from_geoserver.png', $thumbnail->asString());
+    //     file_put_contents(__DIR__ . '/../fixtures/shapefile_thumbnail_from_geoserver.png', $thumbnail->asString());
 
-        $image2 = new Image(__DIR__ . '/../fixtures/shapefile_thumbnail_from_geoserver.png');
+    //     $image2 = new Image(__DIR__ . '/../fixtures/shapefile_thumbnail_from_geoserver.png');
 
-        $difference = $image1->difference($image2, new EuclideanDistance());
+    //     $difference = $image1->difference($image2, new EuclideanDistance());
 
-        unlink(__DIR__ . '/../fixtures/shapefile_thumbnail_from_geoserver.png');
-        $deleteResult = $this->geoserver->remove($file);
+    //     unlink(__DIR__ . '/../fixtures/shapefile_thumbnail_from_geoserver.png');
+    //     $deleteResult = $this->geoserver->remove($file);
 
-        // considering a 20% difference as acceptable
-        $this->assertTrue($difference->percentage() < 20);
-    }
+    //     // considering a 20% difference as acceptable
+    //     $this->assertTrue($difference->percentage() < 20);
+    // }
 }
