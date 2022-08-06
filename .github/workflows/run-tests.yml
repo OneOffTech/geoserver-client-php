@@ -13,10 +13,16 @@ jobs:
       fail-fast: true
       matrix:
         os: [ubuntu-latest]
-        php: [7.4, 8.0, 8.1] 
-        stability: [prefer-stable] # prefer-lowest
+        php: [7.4, 8.0, 8.1]
+        geoserver: ["2.20.4", "2.21.0"]
+        exclude:
+        - geoserver: "2.20.4"
+          php: 7.4
 
-    name: P${{ matrix.php }} - ${{ matrix.stability }} - ${{ matrix.os }}
+    name: P${{ matrix.php }} - G${{ matrix.geoserver }}
+
+    env:
+      GEOSERVER_TAG: ${{ matrix.geoserver }}
 
     steps:
       - name: Checkout code
@@ -36,7 +42,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer update --${{ matrix.stability }} --prefer-dist --no-interaction
+          composer update --prefer-dist --no-interaction
       
       - name: Create Environment
         run: |
@@ -46,8 +52,8 @@ jobs:
       - name: Execute tests
         env:
           GEOSERVER_URL: "http://127.0.0.1:8600/geoserver/"
-          GEOSERVER_USER: "admin"
-          GEOSERVER_PASSWORD: "geoserver"
+          GEOSERVER_USER: "GEOSERVER_ADMIN_USER"
+          GEOSERVER_PASSWORD: "GEOSERVER_ADMIN_PASSWORD"
         run: vendor/bin/phpunit
 
       - name: Stop Environment

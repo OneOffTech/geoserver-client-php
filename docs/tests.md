@@ -8,7 +8,8 @@ vendor/bin/phpunit
 
 By default integration tests are not executed unless in the phpunit.xml file a GeoServer instance is specified.
 
-The `phpunit.xml.dist` define the `GEOSERVER_URL`, `GEOSERVER_USER`, `GEOSERVER_PASSWORD` for that purpose. 
+The `phpunit.xml.dist` define the `GEOSERVER_URL`, `GEOSERVER_USER`,
+`GEOSERVER_PASSWORD` for that purpose. 
 If you want you can copy `phpunit.xml.dist` to `phpunit.xml` and edit those variables in place 
 or define them in your environment variables.
 
