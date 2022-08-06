@@ -15,6 +15,17 @@ This project adhere to Semantic Versioning.
 ### Fixed
 ### Security
 
+## [0.4.0] - 2022-08-06
+
+### Added
+
+- Support for PHP 8.0 and 8.1
+- Support for GeoServer 2.17.x
+
+### Removed
+
+- Support for PHP 7.1, 7.2 and 7.3
+
 ## [0.3.0] - 2020-01-06
 
 ### Added
