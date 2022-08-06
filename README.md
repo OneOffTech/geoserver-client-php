@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/OneOffTech/geoserver-client-php.svg?branch=master)](https://travis-ci.org/OneOffTech/geoserver-client-php)
+[![run-tests](https://github.com/OneOffTech/geoserver-client-php/actions/workflows/run-tests.yml/badge.svg)](https://github.com/OneOffTech/geoserver-client-php/actions/workflows/run-tests.yml)
 ![Packagist](https://img.shields.io/packagist/v/oneofftech/geoserver-client-php.svg)
 
 # GeoServer PHP Client
