@@ -23,7 +23,6 @@ namespace OneOffTech\GeoServer\Models;
 
 use OneOffTech\GeoServer\GeoType;
 use JMS\Serializer\Annotation as JMS;
-use OneOffTech\GeoServer\Contracts\Model;
 
 /**
  * A coverage is a raster data set which originates from a coverage store.
@@ -65,7 +64,6 @@ final class Coverage extends Resource
      * @JMS\Type("array")
      */
     public $grid;
-
 
     public function type()
     {

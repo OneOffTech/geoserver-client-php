@@ -34,15 +34,15 @@ class DeserializeBoundingBoxSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
-        return array(
-            array(
+        return [
+            [
                 'event' => 'serializer.pre_deserialize',
                 'method' => 'onPreDeserialize',
                 'class' => 'OneOffTech\\GeoServer\\Models\\BoundingBox',
                 'format' => 'json',
                 'priority' => 0,
-            ),
-        );
+            ],
+        ];
     }
 
     public function onPreDeserialize(PreDeserializeEvent $event)
@@ -51,7 +51,7 @@ class DeserializeBoundingBoxSubscriber implements EventSubscriberInterface
 
         // Convert a projected CSR response to string
 
-        if (isset($data['crs']) && !is_string($data['crs'])) {
+        if (isset($data['crs']) && ! is_string($data['crs'])) {
             $crs = $data['crs'];
             
             if (isset($crs['@class']) && $crs['@class'] === 'projected') {

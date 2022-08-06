@@ -22,16 +22,11 @@
 namespace Tests\Integration;
 
 use Tests\TestCase;
-use GuzzleHttp\Psr7\Request;
 use OneOffTech\GeoServer\GeoFile;
 use OneOffTech\GeoServer\GeoType;
-use Psr\Http\Message\RequestInterface;
 use Tests\Concern\SetupIntegrationTest;
 use OneOffTech\GeoServer\Models\Feature;
 use OneOffTech\GeoServer\Models\DataStore;
-use OneOffTech\GeoServer\Models\Workspace;
-use OneOffTech\GeoServer\Exception\InvalidDataException;
-use OneOffTech\GeoServer\Exception\ErrorResponseException;
 use OneOffTech\GeoServer\Exception\StoreNotFoundException;
 
 class GeoServerDataStoresTest extends TestCase
@@ -41,7 +36,7 @@ class GeoServerDataStoresTest extends TestCase
     public function test_shapefile_can_be_uploaded()
     {
         $datastoreName = 'shapefile_test';
-        $data = GeoFile::from(__DIR__ . '/../fixtures/shapefile.shp')->name($datastoreName);
+        $data = GeoFile::from(__DIR__.'/../fixtures/shapefile.shp')->name($datastoreName);
 
         $feature = $this->geoserver->upload($data);
 
@@ -122,8 +117,8 @@ class GeoServerDataStoresTest extends TestCase
 
     public function test_shapefile_can_be_uploaded_and_deleted()
     {
-        $datastoreName = 'shapefile_test' . time();
-        $data = GeoFile::from(__DIR__ . '/../fixtures/shapefile.shp')->name($datastoreName);
+        $datastoreName = 'shapefile_test'.time();
+        $data = GeoFile::from(__DIR__.'/../fixtures/shapefile.shp')->name($datastoreName);
 
         $feature = $this->geoserver->upload($data);
 
@@ -141,7 +136,7 @@ class GeoServerDataStoresTest extends TestCase
     public function test_shapefile_in_zip_archive_can_be_uploaded_and_deleted()
     {
         $datastoreName = 'buildings';
-        $data = GeoFile::from(__DIR__ . '/../fixtures/buildings.zip')->name($datastoreName);
+        $data = GeoFile::from(__DIR__.'/../fixtures/buildings.zip')->name($datastoreName);
 
         $feature = $this->geoserver->upload($data);
 
@@ -177,7 +172,7 @@ class GeoServerDataStoresTest extends TestCase
     public function test_utf8_shapefile_in_zip_archive_can_be_uploaded_and_deleted()
     {
         $datastoreName = 'shapefile-utf8-inside';
-        $data = GeoFile::from(__DIR__ . '/../fixtures/some_shapefile_with_cyrillicйфячыцус.zip')->name($datastoreName);
+        $data = GeoFile::from(__DIR__.'/../fixtures/some_shapefile_with_cyrillicйфячыцус.zip')->name($datastoreName);
 
         $feature = $this->geoserver->upload($data);
 
@@ -200,8 +195,8 @@ class GeoServerDataStoresTest extends TestCase
 
     public function test_shapefile_in_zip_archive_can_be_renamed_during_upload_and_deleted()
     {
-        $datastoreName = 'shapezipfile_test' . time();
-        $data = GeoFile::from(__DIR__ . '/../fixtures/buildings.zip')->name($datastoreName);
+        $datastoreName = 'shapezipfile_test'.time();
+        $data = GeoFile::from(__DIR__.'/../fixtures/buildings.zip')->name($datastoreName);
 
         $feature = $this->geoserver->upload($data);
 
@@ -235,11 +230,10 @@ class GeoServerDataStoresTest extends TestCase
         $this->assertFalse($this->geoserver->exist($data), "Data still exists after remove");
     }
 
-    
     public function test_geopackage_can_be_uploaded_and_deleted()
     {
         $datastoreName = 'rivers';
-        $data = GeoFile::from(__DIR__ . '/../fixtures/rivers.gpkg')->name($datastoreName);
+        $data = GeoFile::from(__DIR__.'/../fixtures/rivers.gpkg')->name($datastoreName);
 
         $feature = $this->geoserver->upload($data);
 

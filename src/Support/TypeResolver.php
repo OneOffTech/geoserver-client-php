@@ -23,7 +23,6 @@ namespace OneOffTech\GeoServer\Support;
 
 use OneOffTech\GeoServer\GeoType;
 use OneOffTech\GeoServer\GeoFormat;
-use JsonSchema\Validator as JsonSchemaValidator;
 
 final class TypeResolver
 {
@@ -71,7 +70,6 @@ final class TypeResolver
         GeoFormat::SHAPEFILE_ZIP => 'application/zip',
     ];
     
-
     public static function identify($path)
     {
         $mimeType = mime_content_type($path);
@@ -138,7 +136,7 @@ final class TypeResolver
 
     public static function convertFormatToType($format)
     {
-        return !is_null($format) && isset(static::$typesMap[$format]) ? static::$typesMap[$format] : null;
+        return ! is_null($format) && isset(static::$typesMap[$format]) ? static::$typesMap[$format] : null;
     }
 
     /**
@@ -148,7 +146,7 @@ final class TypeResolver
      */
     public static function normalizedExtensionFromFormat($format)
     {
-        return !is_null($format) && isset(static::$normalizedFormatFileExtensions[$format]) ? static::$normalizedFormatFileExtensions[$format] : null;
+        return ! is_null($format) && isset(static::$normalizedFormatFileExtensions[$format]) ? static::$normalizedFormatFileExtensions[$format] : null;
     }
 
     /**
@@ -158,6 +156,6 @@ final class TypeResolver
      */
     public static function normalizedMimeTypeFromFormat($format)
     {
-        return !is_null($format) && isset(static::$normalizedMimeTypeFileFormat[$format]) ? static::$normalizedMimeTypeFileFormat[$format] : null;
+        return ! is_null($format) && isset(static::$normalizedMimeTypeFileFormat[$format]) ? static::$normalizedMimeTypeFileFormat[$format] : null;
     }
 }

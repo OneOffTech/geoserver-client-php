@@ -23,7 +23,6 @@ namespace OneOffTech\GeoServer\Models;
 
 use OneOffTech\GeoServer\GeoType;
 use JMS\Serializer\Annotation as JMS;
-use OneOffTech\GeoServer\Contracts\Model;
 
 /**
  * A feature type is a vector based spatial resource or data set that originates from a data store

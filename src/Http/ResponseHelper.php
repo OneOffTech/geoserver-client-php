@@ -34,7 +34,7 @@ class ResponseHelper
      */
     public static function isAssociativeArray($array)
     {
-        if (empty($array) || !is_array($array)) {
+        if (empty($array) || ! is_array($array)) {
             return false;
         }
 

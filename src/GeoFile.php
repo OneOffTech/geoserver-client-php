@@ -66,14 +66,13 @@ class GeoFile
      */
     protected $type;
 
-
     public function __construct($path)
     {
         $this->file = new SplFileInfo($path);
 
         list($format, $type, $mimeType) = TypeResolver::identify($path);
 
-        if (!in_array($format, TypeResolver::supportedFormats())) {
+        if (! in_array($format, TypeResolver::supportedFormats())) {
             throw new UnsupportedFileException($path, $format, join(', ', TypeResolver::supportedFormats()));
         }
 
@@ -131,12 +130,10 @@ class GeoFile
         return file_get_contents($this->file->getRealPath());
     }
 
-
     public function __get($property)
     {
         return $this->$property;
     }
-
 
     /**
      * Copy the GeoFile content into a temporary folder and return the new GeoFile instance
@@ -171,8 +168,6 @@ class GeoFile
     {
         return static::from($path);
     }
-
-
 
     /**
      * Check if the specified file is a valid geographical file

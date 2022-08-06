@@ -108,12 +108,10 @@ final class WmsOptions
      */
     const OUTPUT_OPENLAYERS = "application/openlayers";
 
-
     /**
      * Generates an UTFGrid 1.3 JSON response. Requires vector output, either from a vector layer, or from a raster layer turned into vectors by a rendering transformation.
      */
     const OUTPUT_UTFGRID = "application/json;type=utfgrid";
-
 
     private $format = self::OUTPUT_PNG;
     
@@ -133,7 +131,6 @@ final class WmsOptions
 
     private $request = "GetMap";
 
-
     private function isFormatValid($format)
     {
         return in_array($format, $this->supportedFormats());
@@ -148,11 +145,10 @@ final class WmsOptions
 
     public function format($format)
     {
-        if (!$this->isFormatValid($format)) {
-            throw new InvalidArgumentException("Unrecognized format [$format] Expected one of [".join(",", $this->supportedFormats()) . "]");
+        if (! $this->isFormatValid($format)) {
+            throw new InvalidArgumentException("Unrecognized format [$format] Expected one of [".join(",", $this->supportedFormats())."]");
         }
         
-
         $this->format = $format;
         return $this;
     }

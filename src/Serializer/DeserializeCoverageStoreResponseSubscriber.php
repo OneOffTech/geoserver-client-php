@@ -34,22 +34,22 @@ class DeserializeCoverageStoreResponseSubscriber implements EventSubscriberInter
 {
     public static function getSubscribedEvents()
     {
-        return array(
-            array(
+        return [
+            [
                 'event' => 'serializer.pre_deserialize',
                 'method' => 'onPreDeserialize',
                 'class' => 'OneOffTech\\GeoServer\\Http\\Responses\\CoverageStoresResponse',
                 'format' => 'json',
                 'priority' => 1,
-            ),
-            array(
+            ],
+            [
                 'event' => 'serializer.pre_deserialize',
                 'method' => 'onPreDeserialize',
                 'class' => 'OneOffTech\\GeoServer\\Models\\CoverageStore',
                 'format' => 'json',
                 'priority' => 0,
-            ),
-        );
+            ],
+        ];
     }
 
     public function onPreDeserialize(PreDeserializeEvent $event)

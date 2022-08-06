@@ -22,23 +22,20 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use OneOffTech\GeoServer\GeoFile;
-use OneOffTech\GeoServer\GeoType;
-use OneOffTech\GeoServer\GeoFormat;
 use OneOffTech\GeoServer\StyleFile;
 
 class StyleFileTest extends TestCase
 {
     public function test_style_is_supported()
     {
-        $supported = StyleFile::isSupported(__DIR__ . '/../fixtures/style.sld');
+        $supported = StyleFile::isSupported(__DIR__.'/../fixtures/style.sld');
         $this->assertTrue($supported);
     }
     
     public function test_style_file_load()
     {
         $styleName = 'style_test';
-        $file = StyleFile::from(__DIR__ . '/../fixtures/style.sld')->name($styleName);
+        $file = StyleFile::from(__DIR__.'/../fixtures/style.sld')->name($styleName);
 
         $this->assertInstanceOf(StyleFile::class, $file);
         $this->assertEquals('application/vnd.ogc.sld+xml', $file->mimeType);

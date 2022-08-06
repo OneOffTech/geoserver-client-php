@@ -21,7 +21,6 @@
 
 namespace OneOffTech\GeoServer\Support;
 
-use Exception;
 use OneOffTech\GeoServer\Contracts\FileReader;
 
 final class TextReader extends FileReader

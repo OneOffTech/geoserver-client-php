@@ -36,7 +36,6 @@ final class GeoType
      */
     const RASTER = "raster";
 
-
     /**
      * Get the GeoServer store for the specified type
      *
