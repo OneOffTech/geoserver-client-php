@@ -81,7 +81,6 @@ trait InteractsWithHttp
      */
     protected function deserialize($response, $class = null)
     {
-        // dump(json_decode($response->getBody()));
         if (is_null($class)) {
             return json_decode($response->getBody());
         }

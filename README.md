@@ -20,8 +20,8 @@ For detailed information of each of the provided functions check out the [docume
 
 #### Requirements
 
-* [PHP 7.1](http://www.php.net/) or above.
-* [GeoServer](http://geoserver.org/) 2.13.0 or above
+* [PHP 7.4](http://www.php.net/) or above.
+* [GeoServer](http://geoserver.org/) 2.15.0 or above
 
 ## Installation
 
