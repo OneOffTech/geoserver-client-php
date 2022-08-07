@@ -116,7 +116,7 @@ final class GeoServer
 
             $response = $this->post($route, ['workspace' => [ 'name' => $this->workspace] ]);
         } catch (ErrorResponseException $ex) {
-            if ($ex->getCode() !== 401) {
+            if ($ex->getCode() !== 401 && $ex->getCode() !== 409) {
                 throw $ex;
             }
         }

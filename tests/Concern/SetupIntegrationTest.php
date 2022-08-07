@@ -27,7 +27,7 @@ use OneOffTech\GeoServer\Auth\Authentication;
 trait SetupIntegrationTest
 {
     /**
-     * @var OneOffTech\GeoServer\Client
+     * @var \OneOffTech\GeoServer\GeoServer
      */
     protected $geoserver = null;
     
