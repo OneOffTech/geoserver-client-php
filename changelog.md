@@ -15,6 +15,16 @@ This project adhere to Semantic Versioning.
 ### Fixed
 ### Security
 
+## [0.4.1] - 2022-08-07
+
+### Added
+
+- Automated testing against GeoServer 2.20.x and 2.21.x
+
+### Changed
+
+- Ignore already existing errors while creating a workspace
+
 ## [0.4.0] - 2022-08-06
 
 ### Added
